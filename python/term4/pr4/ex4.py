@@ -28,6 +28,7 @@ class Worm():
             self.body.append(\
                 self.canvas.create_oval(\
                     x1 - i * self.off, y1, x2 - i * self.off, y2, fill=self.color))
+            # self.body = list(reversed(self.body))
 
     def move(self, distance):
         x1 = self.head_x
@@ -40,13 +41,17 @@ class Worm():
                 self.canvas.create_oval(\
                     x1 + self.off, y1, x2 + self.off, y2, fill=self.color))
             self.head_x = x1 + self.off
+            x1 = self.head_x
+            x2 = self.head_x + self.size
             if self.head_x > canvas_size:
                 self.head_x = self.head_x - canvas_size
 
 def step():
-    worms[0].move(1)
+    for i in range(len(worms)):
+        worms[i].move(random.randint(1,5))
+    # worms[0].move(1)
     print 'u'
-    root.after(100,step)   
+    root.after(1000,step)   
 
 
 root = Tkinter.Tk()
@@ -56,8 +61,9 @@ canvas.pack()
 
 # worm_1 = Worm(canvas, 100, 100)
 worms = []
-for i in range(1):
-    worms.append(Worm(canvas, random.randint(50, 450), random.randint(50, 450)))
+for i in range(4):
+    worms.append(Worm(canvas,\
+     random.randint(50, 450), random.randint(50, 450)))
 step()
 
 
