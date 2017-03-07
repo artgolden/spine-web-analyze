@@ -19,12 +19,11 @@ class Bow():
         off = self.size
         x = self.x
         y = self.y
-        self.parts.append(self.canvas.create_polygon([x, y], [x , y + off], [x + off // 2, y + off // 2], fill=self.color))
-        self.parts.append(self.canvas.create_polygon([x + off, y], [x + off, y + off], [x + off // 2, y + off // 2], fill=self.color))
+        self.parts.append(self.canvas.create_polygon([x + off // 2, y - off // 2], [x + off // 2, y + off // 2], [x, y], fill=self.color))
+        self.parts.append(self.canvas.create_polygon([x - off // 2, y - off // 2], [x - off // 2, y + off // 2], [x, y], fill=self.color))
+        # self.parts.append(self.canvas.create_polygon([x + off, y], [x + off, y + off], [x + off // 2, y + off // 2], fill=self.color))
     def move(self, x_speed):
-        for i in self.parts:
-            self.canvas.delete(i)
-        self.parts = []
+        self.delete()
         self.y += self.y_speed
         self.x += x_speed
         border = canvas_size - self.size 
@@ -33,14 +32,26 @@ class Bow():
         if self.x > border:
             self.x -= border
         self.draw()
+    def delete(self):
+        for i in self.parts:
+            self.canvas.delete(i)
+        self.parts = []
 
 def step():
     for i in bows:
         i.move(random.randint(-5,5))
     root.after(100, step)
 def on_click(event):
-    print 'u'
+    # print 'u'
+    # print "----", event.x, event.y
+    for i in range(len(bows)):
+        # print bows[i].x, bows[i].y
+        if (abs(bows[i].x - event.x) <= 10) and (abs(bows[i].y - event.y)  <= 10):
+            bows[i].delete()
+            # print "deleteeee"
 
+def on_move(event):
+    pass
 
 
 root = Tkinter.Tk()
