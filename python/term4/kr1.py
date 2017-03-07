@@ -42,16 +42,27 @@ def step():
         i.move(random.randint(-5,5))
     root.after(100, step)
 def on_click(event):
-    # print 'u'
     # print "----", event.x, event.y
     for i in range(len(bows)):
         # print bows[i].x, bows[i].y
-        if (abs(bows[i].x - event.x) <= 10) and (abs(bows[i].y - event.y)  <= 10):
-            bows[i].delete()
-            # print "deleteeee"
+        if (abs(bows[i].x - event.x) <= 10)\
+         and (abs(bows[i].y - event.y)  <= 10):
+            # bows[i].delete() # deleting on click
+            global bow_index
+            canvas.bind('<B1-Motion>', on_move)
 
+bow_index = 0
 def on_move(event):
-    pass
+    global bow_index
+    bows[bow_index].x = event.x
+    bows[bow_index].y = event.y
+    bows[bow_index].delete()
+    bows[bow_index].draw()
+def release(event):
+    global bow_index
+    bow_index = 0
+
+
 
 
 root = Tkinter.Tk()
@@ -65,5 +76,6 @@ for i in range(10):
     bows.append(Bow(canvas,\
      random.randint(50,450), random.randint(50,450)))
 canvas.bind('<ButtonPress>', on_click)
+canvas.bind('<ButtonRelease>', release)
 
 root.mainloop()
