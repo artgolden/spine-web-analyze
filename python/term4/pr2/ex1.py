@@ -12,7 +12,7 @@ clr = ["red", "green", "blue", "white"]
 
 def step():
   	global x, y, timer, color
-  	if timer == 1000:
+  	if timer == 10:
   		if color != 3:
   			color += 1
   		else:

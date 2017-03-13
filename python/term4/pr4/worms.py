@@ -51,7 +51,7 @@ def step():
         worms[i].move(random.randint(1,5))
     # worms[0].move(1)
     print 'u'
-    root.after(1000,step)   
+    root.after(100,step)   
 
 
 root = Tkinter.Tk()

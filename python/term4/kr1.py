@@ -11,7 +11,7 @@ class Bow():
         self.canvas = canvas
         self.size = 50
         self.color = "blue"
-        self.y_speed = 5
+        self.y_speed = 2
         self.parts = []
         self.draw()
 
@@ -40,7 +40,7 @@ class Bow():
 def step():
     for i in bows:
         i.move(random.randint(-5,5))
-    root.after(100, step)
+    root.after(30, step)
 def on_click(event):
     # print "----", event.x, event.y
     for i in range(len(bows)):

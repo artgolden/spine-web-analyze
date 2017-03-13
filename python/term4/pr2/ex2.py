@@ -1,7 +1,7 @@
 import random
 import math
 import Tkinter
-canvas_size = 1000
+canvas_size = 500
 
 x = 1
 y = 1
@@ -17,15 +17,16 @@ def sign(x):
 def step():
   global x, y, n
   a, b, c = 0.4, 1, 0
-  mg = 300
-  of = 400
-  canvas.create_line([of + x * mg, of + y * mg], [of + x * mg, of + y * mg], fill='white')
+  mg = 100
+  of = 200
+  canvas.create_line([of + x * mg, of + y * mg], [of + 1 + x * mg, of + y * mg], fill='white')
   xn = x
   x = (y - sign(x)*math.sqrt(abs(b * x - c))) 
   y = (a - xn)
   n += 1
-  if n < 40000:
-  	root.after("idle", step)
+  if n < 20000:
+    root.after("idle", step)
+  	#root.after(1, step)
 
 root = Tkinter.Tk()
 canvas = Tkinter.Canvas(root, width=canvas_size, height=canvas_size, background='black')
