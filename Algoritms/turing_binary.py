@@ -72,7 +72,7 @@ tm.rule('q0', ';', ';', '<', 'det')
 tm.rule('det', '_', '_', '<', 'det')
 tm.rule('det', '0', '_', '<', 'fin_r0')
 tm.rule('det', '1', '_', '<', 'fin_r1')
-tm.rule('det', '+', '+', '<', 'Fin')
+tm.rule('det', '+', '+', '<', 'g0')
 
 tm.rule('fin_r0', '+', '+', '<', 'g0')
 tm.rule('fin_r0', '0', '0', '<', 'fin_r0')
@@ -85,6 +85,7 @@ tm.rule('fin_r1', '1', '1', '<', 'fin_r1')
 tm.rule('g0', '1', '_', '<', 'fin_l1')
 tm.rule('g0', '0', '_', '<', 'fin_l0')
 tm.rule('g0', '_', '_', '<', 'g0')
+tm.rule('g0', '=', '=', '<', 'Finito')
 
 tm.rule('g1', '1', '_', '<', 'fin_l2')
 tm.rule('g1', '0', '_', '<', 'fin_l1')
@@ -104,7 +105,7 @@ tm.rule('fin_l2', '1', '1', '<', 'fin_l2')
 
 tm.rule('s0', '0', '0', '<', 's0')
 tm.rule('s0', '1', '1', '<', 's0')
-tm.rule('s0', '*', '1', '<', 's0')
+tm.rule('s0', '*', '1', '>', 'Return')
 tm.rule('s0', '_', '0', '>', 'Return')
 
 tm.rule('s1', '0', '0', '<', 's1')
@@ -139,4 +140,4 @@ tm.rule('Finito', '1', '1', '<', 'Finito')
 
 
 tm.validate('01+=_*;', ('q0', 'fin_r0', 'fin_r1', 'fin_l0', 'fin_l1', 'fin_l2', 's0', 's1', 's2', 's2fin', 'Return', 'det', 'g0', 'g1', 'Fin', 'Finito'))
-tm.run('=100+111;', 0)
+tm.run('=100100001P+101001;', 0)
