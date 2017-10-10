@@ -49,9 +49,31 @@ class DoubleLinkedList(object):
 				if curr.prev != None:
 					curr = curr.prev
 				else: break
-
 		else:
 			print "List is empty"
+
+	def sort(self):
+		def correct_created_inverses(self, curr):
+			if curr.next != None:
+				while curr.data > curr.next.data:
+					curr.data, curr.next.data = curr.next.data, curr.data
+					if curr.next == None:
+						curr = curr.next
+					else:
+						break
+			else: pass
+
+		invert = True
+		while invert == True:
+			invert = False
+			curr = self.tail
+			while curr.prev != None:
+				if curr.data < curr.prev.data:
+					curr.data, curr.prev.data = curr.prev.data, curr.data
+					invert = True
+					correct_created_inverses(self, curr)
+				else:
+					curr = curr.prev
 
 	def show(self):
 		if self.root != None:
@@ -67,12 +89,16 @@ class DoubleLinkedList(object):
 
 
 d = DoubleLinkedList()
-d.append(2)
+d.append(7)
 d.append(3)
-d.append(4)
+d.append(6)
 d.append(5)
+d.append(9)
+d.append(10)
+d.append(4)
+
 d.show()
-d.remove(3)
+d.sort()
 d.show()
 
 
