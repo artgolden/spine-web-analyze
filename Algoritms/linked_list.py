@@ -74,6 +74,15 @@ class DoubleLinkedList(object):
 					correct_created_inverses(self, curr)
 				else:
 					curr = curr.prev
+	def invert(self):
+		start = self.root
+		end = self.tail
+		if self.len > 1:
+			while start.next != end and start.next != end.prev:
+				start.data, end.data = end.data, start.data
+				start = start.next
+				end = end.prev
+			start.data, end.data = end.data, start.data
 
 	def show(self):
 		if self.root != None:
@@ -99,6 +108,8 @@ d.append(4)
 
 d.show()
 d.sort()
+d.show()
+d.invert()
 d.show()
 
 
