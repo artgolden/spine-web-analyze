@@ -48,7 +48,8 @@ def read_formula(formula):
 					regStack.sprint()
 					operStack.sprint()
 					operation = operStack.pop()
-					number = regStack.pop()
+					number = register
+					register = regStack.pop()
 					print  "reg =", register, "oper =", operation, "num =", number
 					register = calculate(register, operation, number)
 					operation = None
