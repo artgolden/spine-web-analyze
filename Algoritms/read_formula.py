@@ -58,7 +58,7 @@ def read_formula(formula):
 				# print "oper = ", operation
 	return register
 
-result = read_formula("(5 + 3 * (7 - 1) - 3 ) / (7 + 3)")
+result = read_formula("5+6*7")
 print "Result = ", result
 	
 
