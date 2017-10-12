@@ -24,6 +24,32 @@ def read_formula(formula):
 		}
 		return operDict[oper](reg, num)
 
+	def brackets_stack_pop_calc(reg, operStack, regStack):
+		"""Extrack from brackets stack, calculate and put in register"""
+		oper = operStack.pop()
+		num = reg
+		reg = regStack.pop()
+		reg = calculate(reg, oper, num)
+		oper = None
+		num = 0
+		return oper, reg, num
+
+	def low_stack_push(oper, reg, count, lowCountStack, lowOperStack, lowRegStack):
+		lowOperStack.push(oper)
+		lowRegStack.push(reg)
+		lowCountStack.push(count)
+
+	def low_stack_pop_calc(reg, lowCountStack, lowOperStack, lowRegStack):
+		"""Extrack from low operations stack, calculate and put in register"""
+		lowCountStack.pop()
+		oper = lowOperStack.pop()
+		num = reg
+		reg = lowRegStack.pop()
+		reg = calculate(reg, oper, num)
+		return oper, reg, num
+
+
+
 	formula += '_'
 	index = 0
 	for i in formula:
@@ -53,43 +79,27 @@ def read_formula(formula):
 			elif i == ')':
 				# Also testing for the level of brackets we are on. 
 				if lowOperStack.len != 0 and lowCountStack.array[-1] == bracketsCount:
-					lowCountStack.pop()
-					operation = lowOperStack.pop()
-					number = register
-					register = lowRegStack.pop()
-					register = calculate(register, operation, number)
+					operation, register, number, = low_stack_pop_calc(register, lowCountStack, lowOperStack, lowRegStack)
 					operation = None
 					number = 0
 				bracketsCount -= 1
 				if operStack.len != 0 and formula[index + 1] not in "*/":
-					operation = operStack.pop()
-					number = register
-					register = regStack.pop()
-					register = calculate(register, operation, number)
-					operation = None
-					number = 0
+					operation, register, number = brackets_stack_pop_calc(register, operStack, regStack)
+
 			elif i in "+-":
 				# Also testing for the level of brackets we are on. 
 				if lowOperStack.len != 0 and lowCountStack.array[-1] == bracketsCount:
-					lowCountStack.pop()
-					operation = lowOperStack.pop()
-					number = register
-					register = lowRegStack.pop()
-					register = calculate(register, operation, number)
+					operation, register, number, = low_stack_pop_calc(register, lowCountStack, lowOperStack, lowRegStack)
 					operation = i
 					number = 0
 				else:
-					lowOperStack.push(i)
-					lowCountStack.push(bracketsCount)
+					low_stack_push(i, register, bracketsCount, lowCountStack, lowOperStack, lowRegStack)
 					operation = None
-					lowRegStack.push(register)
 					register = 0
+
 			elif i in "*/":
 				if operation and operation not in "*/":
-					lowOperStack.push(operation)
-					lowCountStack.push(bracketsCount)
-					lowRegStack.push(register)
-					operation = None
+					low_stack_push(operation, register, bracketsCount, lowCountStack, lowOperStack, lowRegStack)
 					register = number
 					number = 0
 					operation = i
@@ -101,23 +111,12 @@ def read_formula(formula):
 					operation = i
 			elif i == '_' :
 				if lowOperStack.len != 0:
-					lowCountStack.pop()
-					operation = lowOperStack.pop()
-					number = register
-					register = lowRegStack.pop()
-					register = calculate(register, operation, number)
+					operation, register, number, = low_stack_pop_calc(register, lowCountStack, lowOperStack, lowRegStack)
+				
 				while operStack.len != 0:
-					operation = operStack.pop()
-					number = register
-					register = regStack.pop()
-					register = calculate(register, operation, number)
-					operation = None
-					number = 0
+					operation, register, number = brackets_stack_pop_calc(register, operStack, regStack)
 		index += 1
 					
-		# print  "\n********** i = ", i, "reg =", register, "oper =", operation, "num =", number,\
-		#  regStack.get(), operStack.get(), lowOperStack.get(), lowRegStack.get(), lowCountStack.get(), bracketsCount
-
 	return register
 
 result = read_formula("50+10+(4-5)*(20+10*(3*4-5*7))*(3-2)*(2+1)")
