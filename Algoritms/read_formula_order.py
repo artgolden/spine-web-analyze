@@ -10,6 +10,7 @@ def read_formula(formula):
 
 	regStack = Stack()
 	operStack = Stack()
+	countStack = Stack()
 	lowOperStack = Stack()
 	lowRegStack = Stack()
 	lowCountStack = Stack()
@@ -24,8 +25,9 @@ def read_formula(formula):
 		}
 		return operDict[oper](reg, num)
 
-	def brackets_stack_pop_calc(reg, operStack, regStack):
+	def brackets_stack_pop_calc(reg, operStack, regStack, countStack):
 		"""Extrack from brackets stack, calculate and put in register"""
+		countStack.pop()
 		oper = operStack.pop()
 		num = reg
 		reg = regStack.pop()
@@ -54,7 +56,7 @@ def read_formula(formula):
 	index = 0
 	for i in formula:
 		print  "*** i = ", i, "reg =", register, "oper =", operation, "num =", number,\
-		 regStack.get(), operStack.get(), lowOperStack.get(), lowRegStack.get(), lowCountStack.get(), bracketsCount
+		 regStack.get(), operStack.get(), countStack.get(), lowOperStack.get(), lowRegStack.get(), lowCountStack.get(), bracketsCount
 		if i in "0123456789":
 			if operation == None:
 				register *= 10
@@ -72,8 +74,10 @@ def read_formula(formula):
 			if i == '(':
 				bracketsCount += 1
 				if operation is not None:
+					# Push current operation with number to bracket's stack
 					regStack.push(register)
 					operStack.push(operation)
+					countStack.push(bracketsCount)
 					register = 0
 					operation = None
 			elif i == ')':
@@ -82,9 +86,9 @@ def read_formula(formula):
 					operation, register, number, = low_stack_pop_calc(register, lowCountStack, lowOperStack, lowRegStack)
 					operation = None
 					number = 0
+				if operStack.len != 0 and formula[index + 1] not in "*/" and countStack.array[-1] == bracketsCount:
+					operation, register, number = brackets_stack_pop_calc(register, operStack, regStack, countStack)
 				bracketsCount -= 1
-				if operStack.len != 0 and formula[index + 1] not in "*/":
-					operation, register, number = brackets_stack_pop_calc(register, operStack, regStack)
 
 			elif i in "+-":
 				# Also testing for the level of brackets we are on. 
@@ -114,12 +118,15 @@ def read_formula(formula):
 					operation, register, number, = low_stack_pop_calc(register, lowCountStack, lowOperStack, lowRegStack)
 				
 				while operStack.len != 0:
-					operation, register, number = brackets_stack_pop_calc(register, operStack, regStack)
+					operation, register, number = brackets_stack_pop_calc(register, operStack, regStack, countStack)
 		index += 1
 					
 	return register
 
-result = read_formula("50+10+(4-5)*(20+10*(3*4-5*7))*(3-2)*(2+1)")
+formula = "(2+1)*(1+(3+4))"
+result = read_formula(formula)
 print "Result = ", result
+
+print "Reference = ", eval(formula)
 	
 
