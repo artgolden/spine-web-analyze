@@ -1,13 +1,12 @@
 '''Searching substring in string of nucleotides'''
 import timeit
 nucleotides = 'AGCCCTCCAGGACAGGCTGCATCAGAAGAGGCCATCAAGCAGGTCTGTTCCAAGGGCCTTTGCGTCAGGTGGGCTCAGGATTCCAGGGTGGCTGGACCCCAGGCCCCAGCTCTGCAGCAGGGAGGACGTGGCTGGGCTCGAGCCCTCCAGGACAGGCTGCATCAGAAGAGGCCATCAAGCAGGTCTGTTCCAAGGGCCTTTGCGTCAGGTGGGCTCAGGATTCCAGGGTGGCTGGACCCCAGGCCCCAGCTCTGCAGCAGGGAGGACGTGGCTGGGCTCGTGAAGCATGTGGGGGTGAGCCCAGGGGCCCCAAGGCAGGGCACCTGGCCTTCAGCCTGCCTCAGCCCTGCCTGTCTCCCAGATCACTGTCCTTCTGCCATGGCCCTGTGGATGCGCCTCCTGCCCCTGCTGGCGCTGCTGGCCCTCTGGGGACCTGACCCAGCCGCAGCCTTTGTGAACCAACACCTGTGCGGCTCACACCTGGTGGAAGCTCTCTACCTAGTGTGCGGGGAACGAGGCTTCTTCTACACACCCAAGACCCGCCGGGAGGCAGAGGACCTGCAGGGTGAGCCAACTGCCCATTGCTGCCCCTGGCCGCCCCCAGCCACCCCCTGCTCCTGGCGCTCCCACCCAGCATGGGCAGAAGGGGGCAGGAGGCTGCCACCCAGCAGGGGGTCAGGTGCACTTTTTTAAAAAGAAGTTCTCTTGGTCACGTCCTAAAAGTGACCAGCTCCCTGTGGCCCAGTCAGAATCTCAGCCTGAGGACGGTGTTGGCTTCGGCAGCCCCGAGATACATCAGAGGGTGGGCACGCTCCTCCCTCCACTCGCCCCTCAAACAAATGCCCCGCAGCCCATTTCTCCACCCTCATTTGATGACCGCAGATTCAAGTGTTTTGTTAAGTAAAGTCCTGGGTGACCTGGGGTCACAGGGTGCCCCACGCTGCCTGCCTCTGGGCGAACACCCCATCACGCCCGGAGGAGGGCGTGGCTGCCTGCCTGAGTGGGCCAGACCCCTGTCGCCAGGCCTCACGGCAGCTCCATAGTCAGGAGATGGGGAAGATGCTGGGGACAGGCCCTGGGGAGAAGTACTGGGATCACCTGTTCAGGCTCCCACTGTGACGCTGCCCCGGGGCGGGGGAAGGAGGTGGGACATGTGGGCGTTGGGGCCTGTAGGTCCACACCCAGTGTGGGTGACCCTCCCTCTAACCTGGGTCCAGCCCGGCTGGAGATGGGTGGGAGTGCGACCTAGGGCTGGCGGGCAGGCGGGCACTGTGTCTCCCTGACTGTGTCCTCCTGTGTCCCTCTGCCTCGCCGCTGTTCCGGAACCTGCTCTGCGCGGCACGTCCTGGCAGTGGGGCAGGTGGAGCTGGGCGGGGGCCCTGGTGCAGGCAGCCTGCAGCCCTTGGCCCTGGAGGGGTCCCTGCAGAAGCGTGGCATTGTGGAACAATGCTGTACCAGCATCTGCTCCCTCTACCAGCTGGAGAACTACTGCAACTAGACGCAGCCCGCAGGCAGCCCCACACCCGCCGCCTCCTGCACCGAGAGAGATGGAATAAAGCCCTTGAACCAGC'
-nucleotides1 = 'AGCCCTCCAGGGACAGGCTGCATC'
+nucleotides1 = 'AGCCCTCCAGGACAGGCTGCATC'
 nucleotides2 = 'AGCCCTCCAGGACAGGCTGCATCAGAAGAGGCCATCAAGCAGGTCTGTTCCAAGGGCCTTTGCGTCAGGTGGGCTCAGGATTCCAGGGTGGCTGGACCCCAGGCCCCAGCTCTGCAGCAGGGAGGACGTGGCTGGGCTCGAGCCCTCCAGGACAGGCTGCATCAGAAGAGGCCATCAAGCAGGTCTGTTCCAAGGGCCTTTGCGTCAGGTGGGCTCAGGATTCCAGGGTGGCTGGACCCCAGGCCCCAGCTCTGCAGCAGGGAGGACGTGGCTGGGCTCGTGAAGCATGTGGGGGTGAGCCCAGGGGCCCCAAGGCAGGGCACCTGGCCTTCAGCCTGCCTCAGCCCTGCCTGTCTCCCAGATCACTGTCCTTCTGCCATGGCCCTGTGGATGCGCCTCCTGCCCCTGCTGGCGCTGCTGGCCCTCTGGGGACCTGACCCAGCCGCAGCCTTTGTGAACCAACACCTGTGCGGCTCACACCTGGTGGAAGCTCTCTACCTAGTGTGCGGGGAACGAGGCTTCTTCTACACACCCAAGACCCGCCGGGAGGCAGAGGACCTGCAGGGTGAGCCAACTGCCCATTGCTGCCCCTGGCCGCCCCCAGCCACCCCCTGCTCCTGGCGCTCCCACCCAGCATGGGCAGAAGGGGGCAGGAGGCTGCCACCCAGCAGGGGGTCAGGTGCACTTTTTTAAAAAGAAGTTCTCTTGGTCACGTCCTAAAAGTGACCAGCTCCCTGTGGCCCAGTCAGAATCTCAGCCTGAGGACGGTGTTGGCTTCGGCAGCCCCGAGATACATCAGAGGGT'
 pattern1 = 'GGG'
-pattern2 = 'GGGTCTGGGTCT'
+pattern2 = 'GGGGGTCTGGGTCT'
 pattern3 = 'GGGGTTCATGGGGGTTCATGGGGGTTCATG'
 pattern4 = 'GGGGTTCATGTGACTCAGTAGGGGTTCATGTGACTCAGTA'
-
 
 
 
@@ -38,19 +37,31 @@ def str_to_num(line):
 		n += letter_to_dec(line[i])
 	return n
 
-def compare_numbers(matrix, frame, mismatch):
-	if matrix == frame:
+def compare_numbers(matrix, substractor, length, frame, mismatch):
+	indicator = 0
+	matrix -= substractor
+	print "frame =====", frame
+	frame -= matrix
+	frame = str(frame)
+	indicator = frame.count('5')
+	print frame, indicator, matrix
+	if (length - indicator) <= mismatch:
 		return True
 	else:
 		return False
 
-def move_frame(pattern, nucleotides, length, mismatch):
+def move_frame(pattern, nucleotides, mismatch):
+	length = len(pattern)
 	matrix = str_to_num(pattern)
 	frame = str_to_num(nucleotides[:length])
 	found = False
+	substractor = 0
+	for i in range(length):
+		substractor += 5 * 10 ** i
+	print substractor, "substractor"
 	print frame, "frame", nucleotides[:length]
 	for i in range(length, len(nucleotides) - length):
-		if compare_numbers(matrix, frame, mismatch):
+		if compare_numbers(matrix, substractor, length, frame, mismatch):
 			found = True
 			print "Pattern is in array:", found
 			quit(0)
@@ -63,33 +74,5 @@ def move_frame(pattern, nucleotides, length, mismatch):
 		print frame, "frame"
 	print "Pattern is in array:", found
 
-# wrapped = wrapper(move_frame, pattern1, nucleotides, len(pattern1))
-# times = timeit.timeit(wrapped, number=100)
-# print times, "3 letter pattern"
-# wrapped = wrapper(move_frame, pattern2, nucleotides, len(pattern2))
-# times = timeit.timeit(wrapped, number=100)
-# print times, "6 letter pattern"
-# wrapped = wrapper(move_frame, pattern3, nucleotides, len(pattern3))
-# times = timeit.timeit(wrapped, number=100)
-# print times, "9 letter pattern"
-# wrapped = wrapper(move_frame, pattern4, nucleotides, len(pattern4))
-# times = timeit.timeit(wrapped, number=100)
-# print times, "20 letter pattern"
 
-# print "======================================================="
-
-# wrapped = wrapper(move_frame, pattern1, nucleotides2, len(pattern1))
-# times = timeit.timeit(wrapped, number=100)
-# print times, "3 letter pattern"
-# wrapped = wrapper(move_frame, pattern2, nucleotides2, len(pattern2))
-# times = timeit.timeit(wrapped, number=100)
-# print times, "6 letter pattern"
-# wrapped = wrapper(move_frame, pattern3, nucleotides2, len(pattern3))
-# times = timeit.timeit(wrapped, number=100)
-# print times, "9 letter pattern"
-# wrapped = wrapper(move_frame, pattern4, nucleotides2, len(pattern4))
-# times = timeit.timeit(wrapped, number=100)
-# print times, "20 letter pattern"
-
-# print bin(str_to_num(pattern))
-move_frame(pattern1, nucleotides1, len(pattern1), 0)
+move_frame(pattern2, nucleotides, 4)
