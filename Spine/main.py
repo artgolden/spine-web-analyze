@@ -2,23 +2,35 @@
 
 import math
 import json
-# from pprint import pprint
 import numpy as np
 import matplotlib.pyplot as plt
 import SVG as svg
 
-image_resolution = [1000, 1000]
+# image_resolution = [200, 400]
+image_resolution = [2130, 5142]
 
 def main():
-	marks = json.load(open("marks.json"))
-	# pprint(marks)
+	m_data = json.load(open("marks.json"))
 	# print(marks[0]["id"])
 	scene =	svg.Scene("Lines", image_resolution[0], image_resolution[1])
 	colors = [(255,0,0),(0,255,0),(0,0,255)]
 	angle = 0
+	marks = [[],[],[]]
+	for i in m_data:
+		t = i["id"]
+		t = t.split(".") 
+		t = t[-1]
+		if t == "r":
+			marks[0].append(i)
+		elif t == "c":
+			marks[1].append(i)
+		elif t == "l":
+			marks[2].append(i)
+		else:
+			print "Wrong marker name"
+
 	for j in range(3):
-		x = []
-		y = []
+		x, y = [], []
 		for i in marks[j]:
 			x.append(i["x"])
 			y.append(i["y"])
@@ -30,6 +42,8 @@ def main():
 	angle /= 3
 	angle = math.atan(angle)/math.pi*180
 	print "Angle average = ", angle
+	scene.add(svg.Text((200,100),"Angle = " + str(round(angle, 2)), 12))
+
 	scene.write_svg()
 	# scene.display()
 
