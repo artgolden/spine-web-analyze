@@ -62,6 +62,9 @@ def print_graph(nodes):
 	print "==========="
 
 def wide_search(nodes, start, end):
+	if start not in nodes.keys() and end not in nodes.keys():
+		print "start or end does not exist in nodes"
+		quit(1)
 	start = nodes[start]
 	end = nodes[end]
 	start.paths = [start.name]
@@ -75,7 +78,8 @@ def wide_search(nodes, start, end):
 			for j in i.children:
 				if j.color == "white":
 					if j == end:
-						print "Path: ", k + j.name
+						# print i.paths, "hhhhhhhhhhh"
+						print "Path: ", i.paths[0] + j.name
 						Found = True
 					for k in i.paths:
 						j.paths.append(k + j.name)
@@ -89,8 +93,8 @@ def wide_search(nodes, start, end):
 		# queue = new_queue
 
 
-nodes = create_dict("graph.txt")
-wide_search(nodes, "A", "G")
+nodes = create_dict("graph2.txt")
+wide_search(nodes, "a", "i")
 print_graph(nodes)
 
 
