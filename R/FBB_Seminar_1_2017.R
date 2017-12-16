@@ -12,6 +12,8 @@ pbinom(54, size = 100, prob = 0.25, lower.tail = FALSE)
 
 pbinom(69, size = 100, prob = 0.85, lower.tail = FALSE)
 
+log(1.535313e-10, 10)
+
 
 #Экспоненциальное распределение
 
@@ -26,6 +28,17 @@ pexp(24, rate = 0.0125)
 #Нормальное распределение
 n = 16
 sigma <- 12
+
+pnorm(-5, 0, sqrt(16*sigma^2)/16)
+pnorm(-5, 0, 16)
+
+rnorm(64,0,sigma)
+a = rnorm(64,0,sigma)
+sum = 0
+for (i in a){
+  sum = sum + i
+}
+sum / 16 
 
 answer = 2*pnorm(-5, mean = 0, sd = sqrt(2 * sigma^2 / n))
 #pnorm: функция распределения нормального распределения
@@ -68,6 +81,7 @@ B_star = (b - n*p_0) / sqrt(n*p_0*(1-p_0))
 
 #Квантиль N(0,1) распределения:
 qnorm(0.95, mean = 0, sd = 1)
+
 
 #Находим p-value с помощью асимпт. критерия:
 pnorm(B_star, mean = 0, sd = 1, lower.tail = FALSE)

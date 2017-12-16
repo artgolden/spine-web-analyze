@@ -41,6 +41,10 @@ class Turing(object):
 			self.print_state()
 
 	def print_state(self):
+		# tap = ''
+		# for i in self.tape:
+		# 	print i
+		# 	tap += str(i)
 		print self.state, self.position, self.tape
 
 	def validate(self, alphabet=None, states=None):
@@ -91,9 +95,9 @@ tm.rule('s2', '0', '0', '<', 's2')
 tm.rule('s2', '1', '1', '<', 's2')
 tm.rule('s2', '+', '+', '<', 's2')
 tm.rule('s2', '=', '=', '<', 's2')
-tm.rule('s2', '_', '1', '<', 's2fin')
+tm.rule('s2', '_', '0', '<', 's2fin')
 
 tm.rule('s2fin', '_', '1', 'S', 's2fin')
 
 tm.validate('01+=_', ('q0', 'f0', 'f1', 's0', 's1', 's2', 's2fin'))
-tm.run('=1+1', 0)
+tm.run('=0+0', 0)

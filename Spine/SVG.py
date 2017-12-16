@@ -44,6 +44,9 @@ class Scene:
         file.close()
         return
 
+    def return_svg(self):
+        return self.strarray()
+
     def display(self,prog=display_prog):
         os.system("%s %s" % (prog,self.svgname))
         return        
@@ -118,7 +121,7 @@ class Rectangle:
                 (self.width,colorstr(self.fill_color),colorstr(self.line_color),self.line_width)]
 
 class Text:
-    def __init__(self,origin,text,size,color):
+    def __init__(self,origin,text,size,color=(0,0,0)):
         self.origin = origin
         self.text = text
         self.size = size

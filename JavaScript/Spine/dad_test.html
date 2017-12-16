@@ -1,0 +1,180 @@
+<html>
+<head>
+	<title>spine - UI mockup</title>
+	<style>
+		.vertebra-point {
+			fill: none; 
+			stroke-width: .5;
+			opacity: .7
+			width: 48px; 
+			height: 48px;
+		}
+
+		.set {
+		}
+
+		.vertebra-label {
+			font-size: 8;
+			fill: rgba(255, 255, 230, 1);
+		}
+
+
+		.template {
+			stroke: black;
+		}
+
+		.center {
+			stroke: red;
+		}
+
+		.left {
+			stroke: yellow;
+		}
+
+		.right {
+		 	stroke: blue;
+		}
+
+		.toolbox {
+			opacity: 1;
+		}
+
+		.label-micro {
+			font-size: 6px;
+			color: white;
+		}
+
+	</style> 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+	<!-- for draggable , etc. -->
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<script src="jquery.ui.touch-punch.js"></script>
+</head>
+<body style="background-color: #AABBAA;">
+<div id="image" style="width: 100%;">
+<!-- 2130x5142 -->
+	<img id="theimage" width="2130">
+</div>
+<div id="templates" hidden="true">
+	<svg id="vertebra-point-template" viewBox="-20 -20 48 48" xmlns="http://www.w3.org/2000/svg">
+		<g transform="translate(1,1)">
+			<line x1="-16" y1="0" x2="16" y2="0"></line>
+			<line x1="0" y1="-16" x2="0" y2="16"></line>
+			<ellipse cx="0" cy="0" rx="20" ry="20"></ellipse>
+ 		</g>	
+	</svg>
+	<svg id="old" viewBox="-5 -5 12 12" xmlns="http://www.w3.org/2000/svg">
+		<g transform="translate(1,1)">
+			<line x1="-4" y1="0" x2="4" y2="0"></line>
+			<line x1="0" y1="-4" x2="0" y2="4"></line>
+			<ellipse cx="0" cy="0" rx="5" ry="5"></ellipse>
+ 		</g>	
+	</svg>
+</div>
+
+
+<script>
+	var x_array = [];
+	function doit() {
+		$("div#image").scrollLeft(700);
+		$("div#image").scrollTop(300);
+
+		var points = {
+	
+			"test": {
+				x: 0,
+				y: 0,
+				place: "center"
+			},
+	/*
+			"c5c" : {
+				x: 1071, 
+				y: 422,
+				place : "center"
+			},
+			"c5r" : {
+				x: 962, 
+				y: 356,
+				place: "right" 
+			}
+	*/
+		};
+
+		var verterbaLabels = ["C5","C6","C7","Th1","Th2","Th3","Th4","Th5","Th6","Th7"];
+
+		const minY=400;
+		const maxY=1700;
+		const cX=1060;
+		const dX=110;
+		const dY = (maxY-minY)/verterbaLabels.length;
+
+
+		//right is on the left on image
+		for( let i=0; i < verterbaLabels.length; i++ ) {
+			points[verterbaLabels[i]+"c"] = { "y": minY+dY*i, "x": cX, place: "center" };
+			points[verterbaLabels[i]+"r"] = { "y": minY+dY*i, "x": cX-dX, place: "right" };
+			points[verterbaLabels[i]+"l"] = { "y": minY+dY*i, "x": cX+dX, place: "left" };
+		}
+
+
+
+		const centerOfPointImage = 14; //todo: WHY 18 12->48 6->24 but got 6->18 
+		
+		for(var pointid in points) {
+			let point = points[pointid];
+			console.log("Point #" + pointid + ": { x: "+ point.x+", y: "+ point.y + ", place: "+ point.place );
+				
+			function set( pointid, point ) {
+				let left = point.x-centerOfPointImage;
+				let top = point.y-centerOfPointImage;
+				let style = "left: "+left+"; top: "+top+"; position: absolute;"
+				console.log("Point #" + pointid + ": style=\""+style+"\"");
+				let svg = $("svg#vertebra-point-template").clone()
+					.attr( "id", pointid )
+					.attr("class","vertebra-point set " + point.place)
+					//.attr("style", style)
+					;
+				style = style + "width:64; height: 96;";//+" border-style: dashed; border-color: rgba(255, 255, 230, 0.1); background-color: rgba(255, 255, 230, 0.1);";
+				let div = $(svg).wrap("<div id=\"div_"+pointid+"\" style=\""+style+"\"></div>").parent(); //width=\"120\" height=\"120\"
+				//$("div#image").append(svg);
+				$("div#image").append(div);
+				// Below is the part that gets element coordinates 
+				div.draggable({
+					    stop: function(e, ui) {
+					        var offset = $(this).offset(),
+					            x = offset.left,
+					            y = offset.top;
+					            x_array.push(x);
+					            // $(this).x = x;
+					            // $(this).y = y;
+
+					        $(this).text("Position: (" + x + ", " + y + ")"); //prints coordinates in place of a marker
+					    }
+					});	
+				div.append("<span class=\"label-micro\">"+pointid+"</span>");
+				}
+			
+			set(pointid,point);
+		}
+		// console.log(x_array);
+	}
+	$("img#theimage").load( function() {
+		console.log("Image loaded.");
+		doit();
+	});
+	function write_coord(x_array) {
+		console.log("TEST");
+		for (var i = 0; i < x_array.length; i++) {
+			console.log(i + "");
+		}
+	}
+
+</script>
+<button onclick="write_coord(x_array)">Write coord</button>
+<script>
+	$("img#theimage").attr("src", "dev-doc/IMG-0001-00001.jpg" );
+	//$("img#theimage").attr("src", "data:image/jpeg;base64,"
+</script>
+</body>
+</html>

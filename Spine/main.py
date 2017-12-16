@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import SVG as svg
 
 # image_resolution = [200, 400]
-image_resolution = [2130, 5142]
+image_resolution = [5142, 2130]
 
 def main():
 	m_data = json.load(open("marks.json"))

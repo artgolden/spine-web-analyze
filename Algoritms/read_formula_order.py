@@ -11,6 +11,7 @@ def read_formula(formula):
 	regStack = Stack()
 	operStack = Stack()
 	countStack = Stack()
+	
 	lowOperStack = Stack()
 	lowRegStack = Stack()
 	lowCountStack = Stack()
@@ -123,7 +124,7 @@ def read_formula(formula):
 					
 	return register
 
-formula = "(2+1)*(1+(3+4))"
+formula = "(2*(2+1)*(1+(3+4))*(1+(4+6)+3))"
 result = read_formula(formula)
 print "Result = ", result
 
