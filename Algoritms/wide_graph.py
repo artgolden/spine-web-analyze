@@ -62,36 +62,39 @@ def print_graph(nodes):
     print "==========="
 
 def wide_search(nodes, start, end):
-    start = nodes[start]
-    end = nodes[end]
-    start.paths = [start.name]
-    start.color = "grey"
-    queue = [start]
-    o = 0
-    found = False
-    while not found:
-        new_queue = []
-        for i in queue:
-            for j in i.children:
-                if j.color == "white":
-                    if j == end:
+	if start not in nodes.keys() and end not in nodes.keys():
+		print "start or end does not exist in nodes"
+		quit(1)
+	start = nodes[start]
+	end = nodes[end]
+	start.paths = [start.name]
+	start.color = "grey"
+	queue = [start]
+	o = 0
+	Found = False
+	while not Found:
+		new_queue = []
+		for i in queue:
+			for j in i.children:
+				if j.color == "white":
+					if j == end:
 						# print i.paths, "hhhhhhhhhhh"
 						print "Path: ", i.paths[0] + j.name
 						Found = True
-                    for k in i.paths:
-                        j.paths.append(k + j.name)
-                    new_queue.append(j)
-                    j.color = "grey"
-        queue = new_queue
-        o += 1
+					for k in i.paths:
+						j.paths.append(k + j.name)
+					new_queue.append(j)
+					j.color = "grey"
+		queue = new_queue
+		o += 1
+		
+		# new_queue = []
+		# for i in queue:
+		# queue = new_queue
 
-        # new_queue = []
-        # for i in queue:
-        # queue = new_queue
 
-
-nodes = create_dict("graph.txt")
-wide_search(nodes, "A", "G")
+nodes = create_dict("graph2.txt")
+wide_search(nodes, "a", "i")
 print_graph(nodes)
 
 
