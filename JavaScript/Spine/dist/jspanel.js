@@ -2975,11 +2975,19 @@ var jsPanel = {
             self.classList.add('jsPanel-depth-' + opts.boxShadow);
         }
 
+<<<<<<< HEAD
         /* option.headerRemove,
          option.iconfont,
          option.headerControls,
          option.headerLogo,
          option.headerTitle
+=======
+        /* option.headerRemove,
+         option.iconfont,
+         option.headerControls,
+         option.headerLogo,
+         option.headerTitle
+>>>>>>> 426d272dfb6c61356a4ecc5effec1bfae4179cfb
          */
         if (!options.headerRemove) {
             if (options.headerLogo) {
