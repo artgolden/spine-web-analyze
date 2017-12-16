@@ -4,7 +4,6 @@ class Node:
 	def __init__(self, name):
 		self.name = name
 		self.children = []
-		# self.parents = []
 		self.color = "white"
 		self.paths = []
 
@@ -27,24 +26,20 @@ def process_string(string, nodes):
 		if child in nodes.keys():
 			child = nodes[child]
 			parent.children.append(child)
-			# child.parents.append(parent)
 		else:
 			nodes[child] = Node(child) # added new Node object to dictionary 
 			child = nodes[child]
 			parent.children.append(child)
-			# child.parents.append(parent)
 	else:
 		nodes[parent] = Node(parent)
 		parent = nodes[parent] # Put Node object with name "parent" in parent
 		if child in nodes.keys():
 			child = nodes[child]
 			parent.children.append(child)
-			# child.parents.append(parent)
 		else:
 			nodes[child] = Node(child) # added new Node object to dictionary 
 			child = nodes[child]
 			parent.children.append(child)
-			# child.parents.append(parent)		
 	return nodes
 
 def print_graph(nodes):
@@ -55,10 +50,6 @@ def print_graph(nodes):
 		for j in i.children:
 			t += j.name
 		print "children----", t
-		t = ""
-		# for j in i.parents:
-		# 	t += j.name
-		# print "parents----", t
 	print "==========="
 
 def wide_search(nodes, start, end):
@@ -78,8 +69,7 @@ def wide_search(nodes, start, end):
 			for j in i.children:
 				if j.color == "white":
 					if j == end:
-						# print i.paths, "hhhhhhhhhhh"
-						print "Path: ", i.paths[0] + j.name
+						print "Path: ", i.paths[0] + j.name # Corrected 
 						Found = True
 					for k in i.paths:
 						j.paths.append(k + j.name)
@@ -94,7 +84,7 @@ def wide_search(nodes, start, end):
 
 
 nodes = create_dict("graph2.txt")
-wide_search(nodes, "a", "i")
-print_graph(nodes)
+wide_search(nodes, "c", "f")
+# print_graph(nodes)
 
 

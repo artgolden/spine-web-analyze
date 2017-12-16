@@ -7,7 +7,7 @@ def wrapper(func, *args, **kwargs):
     return wrapped
 
 
-def mergeSorted(theList1,theList2):
+def merge_sorted(theList1,theList2):
     sortedList = []
     counter1 = 0
     counter2 = 0
@@ -26,7 +26,7 @@ def mergeSorted(theList1,theList2):
             sortedList.append(theList2[counter2])
             counter2 += 1
 
-def mergeSortIterative(theList):
+def merge_sort_iterative(theList):
 
     theNewList = map(lambda x: [x], theList)
     theLength = 1
@@ -37,7 +37,7 @@ def mergeSortIterative(theList):
         pairs = zip(theNewList[::2], theNewList[1::2])
 
         for pair in pairs:
-            theNewNewList.append( mergeSorted( pair[0], pair[1] ) )
+            theNewNewList.append( merge_sorted( pair[0], pair[1] ) )
 
         if len(pairs) * 2 < len(theNewList):
             theNewNewList.append(theNewList[-1])
@@ -96,13 +96,9 @@ def partition(myList, start, end):
             done = True
         else:
             # swap places
-            temp = myList[left]
-            myList[left] = myList[right]
-            myList[right] = temp
+            myList[left], myList[right] = myList[right], myList[left]
     # swap start with myList[right]
-    temp = myList[start]
-    myList[start] = myList[right]
-    myList[right] = temp
+    myList[start], myList[right] = myList[right], myList[start]
     return right
 
 def sort(array):
@@ -112,28 +108,27 @@ def sort(array):
 def compare_sorted(array):
 	bubble = bubble_sort(array)
 	quick = quicksort(array, 0, len(array) - 1)
-	merge = mergeSortIterative(array)
+	merge = merge_sort_iterative(array)
 	if bubble == quick == merge:
 		print "All lists sorted identicaly."
 	else:
 		print "Not identical sorting."
-# TODO Add randomized generation of a large list
 # arr = [int(x) for x in '4 7 3 5 8 2 3 6 8 9'.split(' ')]
 # arr = [int(x) for x in range(100) ]
 arr = random.sample(xrange(200), 200)
 a = 1
 
 wrapped = wrapper(quicksort, arr, 0, len(arr) - 1)
-times = timeit.timeit(wrapped, number=1000)
+times = timeit.timeit(wrapped, number=100)
 print times, "quicksort"
 wrapped = wrapper(bubble_sort, arr)
-times = timeit.timeit(wrapped, number=1000)
+times = timeit.timeit(wrapped, number=100)
 print times, "bubble"
-wrapped = wrapper(mergeSortIterative, arr)
-times = timeit.timeit(wrapped, number=1000)
-print times, "mergeSortIterative"
+wrapped = wrapper(merge_sort_iterative, arr)
+times = timeit.timeit(wrapped, number=100)
+print times, "merge_sort_iterative"
 wrapped = wrapper(sort, arr)
-times = timeit.timeit(wrapped, number=1000)
+times = timeit.timeit(wrapped, number=100)
 print times, "native"
 
 compare_sorted(arr)

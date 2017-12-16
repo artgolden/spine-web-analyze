@@ -25,7 +25,7 @@ class DoubleLinkedList(object):
 			self.len += 1
 
 	def remove(self, data):
-		if self.root != None:
+		if self.root is not None:
 			curr = self.tail
 			st = ""
 			while True:
@@ -46,7 +46,7 @@ class DoubleLinkedList(object):
 						break
 				else: pass
 				print curr.data
-				if curr.prev != None:
+				if curr.prev is not None:
 					curr = curr.prev
 				else: break
 		else:
@@ -54,7 +54,7 @@ class DoubleLinkedList(object):
 
 	def sort(self):
 		def correct_created_inverses(self, curr):
-			if curr.next != None:
+			if curr.next is not None:
 				while curr.data > curr.next.data:
 					curr.data, curr.next.data = curr.next.data, curr.data
 					if curr.next == None:
@@ -67,7 +67,7 @@ class DoubleLinkedList(object):
 		while invert == True:
 			invert = False
 			curr = self.tail
-			while curr.prev != None:
+			while curr.prev is not None:
 				if curr.data < curr.prev.data:
 					curr.data, curr.prev.data = curr.prev.data, curr.data
 					invert = True
@@ -85,10 +85,10 @@ class DoubleLinkedList(object):
 			start.data, end.data = end.data, start.data
 
 	def show(self):
-		if self.root != None:
+		if self.root is not None:
 			curr = self.tail
 			st = ""
-			while curr.prev != None:
+			while curr.prev is not None:
 				st += str(curr.data) + " "
 				curr = curr.prev
 			print st + str(curr.data)
