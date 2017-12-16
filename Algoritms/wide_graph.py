@@ -50,12 +50,13 @@ def process_string(string, nodes_dict):
 def print_graph(nodes_dict):
     for i in nodes_dict.values():
         print i.name
-        t = ""
-        if len(i.paths): print i.paths
+        tmp = ""
+        if len(i.paths):
+            print i.paths
         for j in i.children:
-            t += j.name
-        print "children----", t
-        t = ""
+            tmp += j.name
+        print "children----", tmp
+        tmp = ""
     print "==========="
 
 def wide_search(nodes_dict, start, end):
@@ -67,9 +68,8 @@ def wide_search(nodes_dict, start, end):
     start.paths = [start.name]
     start.color = "grey"
     queue = [start]
-    o = 0
-    Found = False
-    while not Found:
+    found = False
+    while not found:
         new_queue = []
         for i in queue:
             for j in i.children:
@@ -77,21 +77,13 @@ def wide_search(nodes_dict, start, end):
                     if j == end:
                         # print i.paths, "hhhhhhhhhhh"
                         print "Path: ", i.paths[0] + j.name
-                        Found = True
+                        found = True
                     for k in i.paths:
                         j.paths.append(k + j.name)
                     new_queue.append(j)
                     j.color = "grey"
-        queue = new_queue
-        o += 1
-        
-        # new_queue = []
-        # for i in queue:
-        # queue = new_queue
+        queue = new_queue        
 
-
-nodes = create_dict("graph2.txt")
-wide_search(nodes, "e", "j")
-print_graph(nodes)
-
-
+NODES = create_dict("graph2.txt")
+wide_search(NODES, "e", "j")
+print_graph(NODES)
