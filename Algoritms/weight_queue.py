@@ -10,12 +10,12 @@ class QueueWithWeight:
 
 
     def add(self, elem):
-        if elem.priority < self.min_weight:
-            self.min_weight = elem.priority
-        if elem.priority in self.queue_dict.keys(): 
-            self.queue_dict[elem.priority].append(elem)
+        if elem.weight < self.min_weight:
+            self.min_weight = elem.weight
+        if elem.weight in self.queue_dict.keys(): 
+            self.queue_dict[elem.weight].append(elem)
         else:
-            self.queue_dict[elem.priority] = [elem]
+            self.queue_dict[elem.weight] = [elem]
     def pop(self):
         out = self.queue_dict[self.min_weight].pop(0)
         if not self.queue_dict[self.min_weight]:
@@ -26,7 +26,7 @@ class QueueWithWeight:
                 self.min_weight = float('inf')
         return out 
     def change(self, elem, old_weight):
-        self.queue_dict[old_weight].pop(index(elem))
+        self.queue_dict[old_weight].pop(self.queue_dict[old_weight].index(elem))
         self.add(elem)
 
 

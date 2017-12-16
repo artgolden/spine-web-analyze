@@ -1,9 +1,9 @@
 from weight_queue import QueueWithWeight
 
 class Node:
-    def __init__(self, name, weight=None):
+    def __init__(self, name):
         self.name = name
-        self.weight = weight
+        self.weight = float('inf')
         self.color = "white"
         self.children = {}
         self.paths = []
@@ -29,7 +29,7 @@ class Graph:
         ar = string.strip().split(" ")
         parent = ar[0]
         child = ar[1]
-        weight = ar[2]
+        weight = int(ar[2])
 
         if parent in nodes_dict.keys():
             parent = nodes_dict[parent] # Put Node object with name "parent" in parent
@@ -56,6 +56,7 @@ class Graph:
         # print self.nodes
         for i in self.nodes.values():
             print i.name
+            print "Weight ", i.weight
             tmp = ""
             # if len(i.paths):
                 # print i.paths
@@ -71,41 +72,38 @@ class Graph:
     def relaxation(self, pre, nex):
         # self.que.add()
         old_weight = nex.weight
+        # print pre.weight, pre.children[nex]
+        # quit(0)
         if nex.weight > (pre.weight + pre.children[nex]):
             nex.weight = pre.weight + pre.children[nex]
-            self.que.change(nex, old_weight)
+            if old_weight != float('inf'):
+                if nex in self.que.queue_dict[old_weight]:
+                    self.que.change(nex, old_weight)
     
-    def wide_search(self, start, end):
-        if start not in self.nodes.keys() and end not in self.nodes.keys():
-            print "start or end does not exist in self.nodes"
+    def deikstra_search(self, start):
+        if start not in self.nodes.keys():
+            print "start does not exist in self.nodes"
             quit(1)
         start = self.nodes[start]
-        end = self.nodes[end]
         start.paths = [start.name]
         start.color = "grey"
         start.weight = 0
-        queue = [start]
-        found = False
-        while not found:
-            new_queue = []
-            for i in queue:
-                for j in i.children.keys():
-                    if j.color == "white":
-                        if j == end:
-                            # print i.paths, "hhhhhhhhhhh"
-                            print "Path: ", i.paths[0] + j.name
-                            found = True
-                        for k in i.paths:
-                            j.paths.append(k + j.name)
-                        new_queue.append(j)
-                        j.color = "grey"
-            queue = new_queue  
+        self.que.add(start)
+        while self.que.queue_dict:
+            curr = self.que.pop()
+            curr.color = "black"
+            if curr.children:
+                for i in curr.children.keys():
+                    if i.color != "black":
+                        self.relaxation(curr, i)
+                        if i.color == "white":
+                            self.que.add(i)
+                            i.color = "grey"
+        
 
-node = Node("a", 1)
-node2 = Node("b", 2)
 # print node.weight
 # que = QueueWithweight(node, node2)
 # print que.queue_dict
-graph = Graph("graph_dei.txt")
+graph = Graph("graph_dei2.txt")
+graph.deikstra_search("s")
 graph.print_graph()
-graph.wide_search("a","i")
