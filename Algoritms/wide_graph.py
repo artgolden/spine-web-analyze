@@ -75,8 +75,9 @@ def wide_search(nodes, start, end):
             for j in i.children:
                 if j.color == "white":
                     if j == end:
-                        print "Path: ", k + j.name
-                        found = True
+						# print i.paths, "hhhhhhhhhhh"
+						print "Path: ", i.paths[0] + j.name
+						Found = True
                     for k in i.paths:
                         j.paths.append(k + j.name)
                     new_queue.append(j)
