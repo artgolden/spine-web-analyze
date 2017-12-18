@@ -52,9 +52,8 @@ class Graph:
                 for j in i.children.keys():
                     if j:
                         print "children----" + j.name + str(i.children[j])
-            tmp = ""
         print "==========="
-        
+       
     def relaxation(self, pre, nex):
         if nex.weight > (pre.weight + pre.children[nex]):
             nex.weight = pre.weight + pre.children[nex]
@@ -77,7 +76,7 @@ class Graph:
                     ch = self.relaxation(i, j)
                     changed = changed or ch
                 # print "----"
-            count +=1
+            count += 1
         print count
 
 graph = Graph("graph_dei2.txt")
