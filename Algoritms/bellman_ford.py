@@ -24,25 +24,16 @@ class Graph:
         child = ar[1]
         weight = int(ar[2])
 
-        if parent in self.nodes.keys():
-            parent = self.nodes[parent] # Put Node object with name "parent" in parent
-            if child in self.nodes.keys():
-                child = self.nodes[child]
-                parent.children[child] = weight
-            else:
-                self.nodes[child] = Node(child) # added new Node object to dictionary 
-                child = self.nodes[child]
-                parent.children[child] = weight
-        else:
-            self.nodes[parent] = Node(parent)
-            parent = self.nodes[parent] # Put Node object with name "parent" in parent
-            if child in self.nodes.keys():
-                child = self.nodes[child]
-                parent.children[child] = weight
-            else:
-                self.nodes[child] = Node(child) # added new Node object to dictionary 
-                child = self.nodes[child]
-                parent.children[child] = weight
+        parent = self.add_Node_if_missing(parent)
+        child = self.add_Node_if_missing(child)
+        parent.children[child] = weight
+
+        
+    def add_Node_if_missing(self, elem):
+        if not elem in self.nodes.keys():
+            self.nodes[elem] = Node(elem)
+        return self.nodes[elem]
+
 
     def print_graph(self):
         for i in self.nodes.values():
@@ -57,8 +48,6 @@ class Graph:
     def relaxation(self, pre, nex):
         if nex.weight > (pre.weight + pre.children[nex]):
             nex.weight = pre.weight + pre.children[nex]
-            # print pre.name, pre.weight,  "======"
-            # print nex.name, nex.weight
             return True
         return False
     
@@ -67,17 +56,13 @@ class Graph:
         start.weight = 0
         changed = True
         count = 0
-        # while changed and count < len(self.nodes.keys()):
-        while changed:
+        while changed and count < len(self.nodes.keys()):
             changed = False
-            for i in self.nodes.values():
-                for j in i.children:
-                    # print j.name
-                    ch = self.relaxation(i, j)
-                    changed = changed or ch
-                # print "----"
+            for parent in self.nodes.values():
+                for child in parent.children:
+                    relax_occured = self.relaxation(parent, child)
+                    changed = changed or relax_occured
             count += 1
-        print count
 
 graph = Graph("/home/tema/dev/Algoritms/graph_dei2.txt")
 graph.bellman_search("s")
