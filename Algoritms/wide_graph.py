@@ -32,14 +32,14 @@ def add_Node_if_missing(elem, nodes_dict):
 
 def print_graph(nodes_dict):
     for i in nodes_dict.values():
-        print i.name
-        tmp = ""
-        if i.paths:
-            print i.paths
-        for j in i.children:
-            tmp += j.name
-        print "children----", tmp
-        tmp = ""
+        print "Node: " + i.name
+        if i.children:
+            children = ""
+            for j in i.children:
+                if j:
+                    children += j.name + ", "
+            print "Children: " + children
+        print ""
     print "==========="
 
 def wide_search(nodes_dict, start, end):

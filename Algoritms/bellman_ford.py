@@ -34,17 +34,19 @@ class Graph:
             self.nodes[elem] = Node(elem)
         return self.nodes[elem]
 
-
     def print_graph(self):
         for i in self.nodes.values():
-            print i.name
+            print "Node: " + i.name
             print "Weight ", i.weight
             if i.children:
+                children = ""
                 for j in i.children.keys():
                     if j:
-                        print "children----" + j.name + str(i.children[j])
+                        children += j.name + "-" + str(i.children[j]) + ", "
+                print "Child-distance: " + children
+            print ""
         print "==========="
-       
+
     def relaxation(self, pre, nex):
         if nex.weight > (pre.weight + pre.children[nex]):
             nex.weight = pre.weight + pre.children[nex]
