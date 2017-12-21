@@ -56,7 +56,7 @@ def linear_fit(y, x):
     return fit
 
 def make_svg(first_y, last_y):
-    scene =    svg.Scene("Line left", image_resolution[0], image_resolution[1])
+    scene = svg.Scene("Line left", image_resolution[0], image_resolution[1])
     scene.add(Line())
 
 @route('/main/<filepath:path>', method="get")

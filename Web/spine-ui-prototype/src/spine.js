@@ -4,7 +4,6 @@
 */
 
 
-
 class Editor {
 	constructor() {
 		Editor.installLoadFileHandler();
@@ -12,9 +11,9 @@ class Editor {
 			var svg = document.createElement('DIV');
 			svg.setAttribute('class', 'lines');
 			svg.innerHTML = svg_code;
-			console.log(svg_code)
+			console.log(svg_code);
 			document.body.appendChild(svg);
-		}
+		};
 	}
 	open(url) {
 		this.loadImage(url);
@@ -29,7 +28,7 @@ class Editor {
 	imageLoaded() {
 		console.log("Editor::imageLoaded()");
 		let points = makePointsFromTemplate();
-		let marker = new Marker()
+		let marker = new Marker();
 		this.marker_obj = marker;
 		document.body.appendChild(marker.element);
 		marker.markPoints(points);
@@ -98,14 +97,14 @@ class Editor {
 			xhr.onload = function() {
 				if(this.status == 200){
 					// console.log(this.responseText);
-					successHandler && successHandler(xhr.responseText);  // TODO understand how this works
-					// svg_code = "" + this.responseText;
+					successHandler && successHandler(xhr.responseText);
+					// TODO understand how this works |^|
 					// console.log(svg_code);
 					// Editor_theEditor.drawSVG(svg_code);
 				}
-			}
+			};
 			xhr.send(JSON.stringify(marker_obj.values()))
-		}
+		};
 		getJSON(this.marker_obj, this.draw_svg)
 			// this.drawSVG(svg_code)
 		// this.drawSVG(xhr.responseText)

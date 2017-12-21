@@ -79,7 +79,7 @@ class Graph:
             count += 1
         print count
 
-graph = Graph("graph_dei2.txt")
+graph = Graph("/home/tema/dev/Algoritms/graph_dei2.txt")
 graph.bellman_search("s")
 graph.print_graph()
     
