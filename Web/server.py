@@ -11,7 +11,7 @@ def parse_markers(marker_list):
     for i in marker_list:
         location = i["id"].split(".")[-1]
         # location = location[-1]
-        if i["id"].split(".")[0] == "Clu":
+        if i["id"].split(".")[0] == "Klu":
             pass
         elif location == "r":
             vertebras[0].append(i)
@@ -20,17 +20,12 @@ def parse_markers(marker_list):
         elif location == "l":
             vertebras[2].append(i)
         else:
-            print "Wrong marker name"
-    
+            print "Wrong marker name"    
     return vertebras
 
-def main(json_obj):
-    image_resolution = json_obj["resolution"]
-    scene = svg.Scene("Lines", image_resolution[0], image_resolution[1])
+def add_linfit_lines(vertebras, scene):
     colors = [(0, 0, 255), (255, 0, 0), (0, 255, 0)]
     angle = 0
-    vertebras = parse_markers(json_obj["marker_list"])
-
     for j in range(3):
         x, y = [], []
         for i in vertebras[j]:
@@ -42,11 +37,23 @@ def main(json_obj):
         first_y, last_y = y[0], y[-1]
         scene.add(svg.Line((100+fit(first_y), first_y),(100+fit(last_y), last_y),colors[j],3))
     angle /= 3
-    angle = math.atan(angle)/math.pi*180
+    angle = math.atan(angle)/math.pi*180    
+    return scene
+
+def main(json_obj):
+    image_resolution = json_obj["resolution"]
+    scene = svg.Scene("Lines", image_resolution[0], image_resolution[1])
+    neck_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'C']
+    back_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'T']
+    
+    neck_vertebras = parse_markers((neck_markers))
+    back_vertebras = parse_markers((back_markers))
+    scene = add_linfit_lines(neck_vertebras, scene)
+    scene = add_linfit_lines(back_vertebras, scene)
+
+
     # print "Angle average = ", angle
     # scene.add(svg.Text((200,100),"Angle = " + str(round(angle, 2)), 12))
-
-    
     # scene.display()
     return scene.return_svg()
 

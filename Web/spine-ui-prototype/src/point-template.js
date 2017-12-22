@@ -210,13 +210,13 @@ function makePointsFromTemplate(width, height) {
 	let scaled = scalePointMap(pointTemplate_Front_RL());
 	scaled["points"].push({"id": "test", x: 0, y: 0, place: "other"});
   scaled["points"].push({
-    id: "Clu.r",
+    id: "Klu.r",
     x: 126,
     y: 964,
     place: "right"
   });
   scaled["points"].push({
-    id: "Clu.l",
+    id: "Klu.l",
     x: 1990,
     y: 952,
     place: "left"
