@@ -27,6 +27,14 @@ class Editor {
 	}
 	imageLoaded() {
 		console.log("Editor::imageLoaded()");
+		var measure_button = document.createElement("button");
+		measure_button.innerHTML = "measure deviation";
+		document.body.appendChild(measure_button);
+		measure_button.addEventListener ("click", 
+		function() {
+			Editor_theEditor.requestSVG();
+		});
+		console.log("created button");
 		let points = makePointsFromTemplate();
 		let marker = new Marker();
 		this.marker_obj = marker;
@@ -36,7 +44,6 @@ class Editor {
 		// Editor_theEditor.marker_obj.values()
 		// console.log(marker.pointsToJSON(points));
 		this.scrollToStart();
-
 		//TODO: We got this url from uploaded file don't need it anymore, so revoke blob 
 		//In fact we may need this image file later (i.e. for saving with poins) so let's keep it at least for now
 		//if( url.startsWith("blob:") ) { 
@@ -103,9 +110,9 @@ class Editor {
 					// Editor_theEditor.drawSVG(svg_code);
 				}
 			};
-			xhr.send(JSON.stringify(marker_obj.values()))
+			xhr.send(JSON.stringify(marker_obj.values()));
 		};
-		getJSON(this.marker_obj, this.draw_svg)
+		getJSON(this.marker_obj, this.draw_svg);
 			// this.drawSVG(svg_code)
 		// this.drawSVG(xhr.responseText)
 	}
