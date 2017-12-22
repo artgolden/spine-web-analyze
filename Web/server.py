@@ -5,29 +5,35 @@ import numpy as np
 from bottle import route, run, static_file, post, request
 import SVG as svg
 
-# image_resolution = [2130, 5142]
+
+def parse_markers(marker_list):
+    vertebras = [[], [], []]
+    for i in marker_list:
+        location = i["id"].split(".")[-1]
+        # location = location[-1]
+        if i["id"].split(".")[0] == "Clu":
+            pass
+        elif location == "r":
+            vertebras[0].append(i)
+        elif location == "c":
+            vertebras[1].append(i)
+        elif location == "l":
+            vertebras[2].append(i)
+        else:
+            print "Wrong marker name"
+    
+    return vertebras
+
 def main(json_obj):
     image_resolution = json_obj["resolution"]
     scene = svg.Scene("Lines", image_resolution[0], image_resolution[1])
-    colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
+    colors = [(0, 0, 255), (255, 0, 0), (0, 255, 0)]
     angle = 0
-    marks = [[], [], []]
-    for i in json_obj["marker_list"]:
-        t = i["id"]
-        t = t.split(".") 
-        t = t[-1]
-        if t == "r":
-            marks[0].append(i)
-        elif t == "c":
-            marks[1].append(i)
-        elif t == "l":
-            marks[2].append(i)
-        else:
-            print "Wrong marker name"
+    vertebras = parse_markers(json_obj["marker_list"])
 
     for j in range(3):
         x, y = [], []
-        for i in marks[j]:
+        for i in vertebras[j]:
             x.append(i["x"])
             y.append(i["y"])
         f = linear_fit(x, y)
@@ -43,6 +49,7 @@ def main(json_obj):
     
     # scene.display()
     return scene.return_svg()
+
 
 def linear_fit(y, x):
     fit = np.polyfit(x, y, 1) # returns line equation coefficients
