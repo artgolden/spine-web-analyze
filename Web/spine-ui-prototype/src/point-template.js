@@ -182,7 +182,7 @@ function pointTemplate_Front_RL() {
 				x: 0,
 				y: 0,
 				place: "center"
-			},
+      }      
 		];
 
 		const minY=400;
@@ -209,5 +209,17 @@ function scalePointMap(pmap, width, height) {
 function makePointsFromTemplate(width, height) {
 	let scaled = scalePointMap(pointTemplate_Front_RL());
 	scaled["points"].push({"id": "test", x: 0, y: 0, place: "other"});
+  scaled["points"].push({
+    id: "Clu.r",
+    x: 126,
+    y: 964,
+    place: "right"
+  });
+  scaled["points"].push({
+    id: "Clu.l",
+    x: 1990,
+    y: 952,
+    place: "left"
+  });
 	return scaled["points"];
 }
