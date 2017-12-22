@@ -11,7 +11,7 @@ image_resolution = [2130, 5142]
 def main(json_obj):
     m_data = json_obj
     # print(marks[0]["id"])
-    scene =    svg.Scene("Lines", image_resolution[0], image_resolution[1])
+    scene = svg.Scene("Lines", image_resolution[0], image_resolution[1])
     colors = [(255,0,0), (0,255,0), (0,0,255)]
     angle = 0
     marks = [[],[],[]]
