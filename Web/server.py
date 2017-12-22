@@ -5,13 +5,14 @@ import numpy as np
 from bottle import route, run, static_file, post, request
 import SVG as svg
 
-image_resolution = [2130, 5142]
+# image_resolution = [2130, 5142]
 def main(json_obj):
+    image_resolution = json_obj["resolution"]
     scene = svg.Scene("Lines", image_resolution[0], image_resolution[1])
     colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
     angle = 0
     marks = [[], [], []]
-    for i in json_obj:
+    for i in json_obj["marker_list"]:
         t = i["id"]
         t = t.split(".") 
         t = t[-1]
@@ -37,7 +38,7 @@ def main(json_obj):
     angle /= 3
     angle = math.atan(angle)/math.pi*180
     # print "Angle average = ", angle
-    scene.add(svg.Text((200,100),"Angle = " + str(round(angle, 2)), 12))
+    # scene.add(svg.Text((200,100),"Angle = " + str(round(angle, 2)), 12))
 
     
     # scene.display()
@@ -56,7 +57,7 @@ def server_static(filepath):
 @post('/svg')
 def get_json():
     json_obj = json.load(request.body)
-    print "Recieved: ", 
+    print "Recieved: ", json_obj
     return main(json_obj)
 if __name__ == "__main__":
     run(debug=True, reloader=True)

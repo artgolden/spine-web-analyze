@@ -96,11 +96,11 @@ class Editor {
 		return Editor_theEditor; 
 	}
 	requestSVG() {
-		var getJSON = function(marker_obj, successHandler) {
+		var getJSON = function(marker_obj, successHandler, image) {
 			var svg_code;
 			var xhr = new XMLHttpRequest();
 			xhr.open('POST', '../../svg', true);
-			xhr.setRequestHeader('Conten-type', 'application/json')
+			xhr.setRequestHeader('Conten-type', 'application/json');
 			xhr.onload = function() {
 				if(this.status == 200){
 					// console.log(this.responseText);
@@ -110,9 +110,18 @@ class Editor {
 					// Editor_theEditor.drawSVG(svg_code);
 				}
 			};
-			xhr.send(JSON.stringify(marker_obj.values()));
+			let marker_list = marker_obj.values();
+			let imageWidth = image.width();
+			let imageHeight = image.height();
+			let json_to_send = {
+				"marker_list": marker_list,
+				"resolution": [imageWidth, imageHeight]
+		 	};
+			// json_to_send.resolution = ;
+			console.log(json_to_send);
+			xhr.send(JSON.stringify(json_to_send));
 		};
-		getJSON(this.marker_obj, this.draw_svg);
+		getJSON(this.marker_obj, this.draw_svg, this.$image());
 			// this.drawSVG(svg_code)
 		// this.drawSVG(xhr.responseText)
 	}
