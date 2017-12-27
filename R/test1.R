@@ -1,3 +1,0 @@
-power = function(p) {pbinom(9, 50, p, lower.tail = TRUE)}
-plot(power, 0, 0.3, xlab = "p", ylab = "The power function")
-

@@ -1,6 +1,0 @@
-trees_data = read.table(tk_choose.files(default = ""), header = TRUE, sep = ";", dec = ",")
-trees_data$Tree <- as.factor(trees_data$Tree)
-boxplot(trees_data$Velocity ~ trees_data$Tree)
-fit <- aov(trees_data$Velocity ~ trees_data$Tree, data = trees_data)
-summary(fit)
-TukeyHSD(fit)
