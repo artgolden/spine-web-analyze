@@ -1,3 +1,6 @@
 node_modules/*
 _backup/*
 _backup/python
+.vscode/settings.json
+spine_workspase_vscode.code-workspace
+.jshintrc
