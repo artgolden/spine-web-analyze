@@ -1,4 +1,4 @@
-'''Read JSON file and output svg'''
+'''Read JSON file and output svg and data'''
 import json
 import math
 import numpy as np
@@ -23,6 +23,25 @@ def parse_markers(marker_list):
             print "Wrong marker name"    
     return vertebras
 
+def single_vert_angle(vert_r, vert_l):
+    x = vert_l["x"] - vert_r["x"]
+    y = vert_l["y"] - vert_r["y"]
+    if abs(y) < 2:
+        y = 0
+    if y > 0:
+        tilt = "LEFT"
+    elif y == 0:
+        tilt = "NONE"
+    else:
+        tilt = "RIGHT"
+    y = float(abs(y))
+    horiz_angle = round(math.atan(y / x) * 180 / math.pi, 2)
+    print horiz_angle, "Tilt to the " , tilt, "   (from the patients prespective)", y, x
+
+def vert_horiz_angles(vertebras):
+    for i in range(len(vertebras[0])):
+        single_vert_angle(vertebras[0][i], vertebras[2][i])
+
 def add_linfit_lines(vertebras, scene):
     colors = [(0, 0, 255), (255, 0, 0), (0, 255, 0)]
     angle = 0
@@ -37,7 +56,9 @@ def add_linfit_lines(vertebras, scene):
         first_y, last_y = y[0], y[-1]
         scene.add(svg.Line((100+fit(first_y), first_y),(100+fit(last_y), last_y),colors[j],3))
     angle /= 3
-    angle = math.atan(angle)/math.pi*180    
+    angle = math.atan(angle) / math.pi * 180    
+    print "Angle average = ", angle
+    # scene.add(svg.Text((200, 200), angle, 24, (255, 255, 255)))
     return scene
 
 def main(json_obj):
@@ -51,8 +72,8 @@ def main(json_obj):
     scene = add_linfit_lines(neck_vertebras, scene)
     scene = add_linfit_lines(back_vertebras, scene)
 
-
-    # print "Angle average = ", angle
+    vert_horiz_angles(neck_vertebras)
+    vert_horiz_angles(back_vertebras)
     # scene.add(svg.Text((200,100),"Angle = " + str(round(angle, 2)), 12))
     # scene.display()
     return scene.return_svg()
@@ -60,18 +81,19 @@ def main(json_obj):
 
 def linear_fit(y, x):
     fit = np.polyfit(x, y, 1) # returns line equation coefficients
-    fit_fn = np.poly1d(fit) 
-    print fit_fn
+    # fit_fn = np.poly1d(fit) 
+    # print fit_fn
     return fit
 
 @route('/main/<filepath:path>', method="get")
 def server_static(filepath):
-    return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
-
+    # return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
+    return static_file(filepath, root='/home/tema/dev/Web/spine-ui-prototype')
+    
 @post('/svg')
 def get_json():
     json_obj = json.load(request.body)
-    print "Recieved: ", json_obj
+    # print "Recieved: ", json_obj
     return main(json_obj)
 if __name__ == "__main__":
     run(debug=True, reloader=True)
