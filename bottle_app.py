@@ -36,12 +36,15 @@ def single_vert_angle(vert_r, vert_l):
         tilt = "RIGHT"
     y = float(abs(y))
     horiz_angle = round(math.atan(y / x) * 180 / math.pi, 2)
-    print horiz_angle, "Tilt to the " , tilt, "   (from the patients prespective)", y, x
+    print horiz_angle, "Tilt to the ", tilt, "   (from the patients prespective)", y, x
+    return str(horiz_angle) + "," + str(tilt)
 
 def vert_horiz_angles(vertebras):
+    out = ""
     for i in range(len(vertebras[0])):
-        single_vert_angle(vertebras[0][i], vertebras[2][i])
-
+        out += single_vert_angle(vertebras[0][i], vertebras[2][i]) + "\n"
+    return out
+    
 def add_linfit_lines(vertebras, scene):
     colors = [(0, 0, 255), (255, 0, 0), (0, 255, 0)]
     angle = 0
@@ -54,7 +57,7 @@ def add_linfit_lines(vertebras, scene):
         angle += f[0]
         fit = np.poly1d(f) 
         first_y, last_y = y[0], y[-1]
-        scene.add(svg.Line((100+fit(first_y), first_y),(100+fit(last_y), last_y),colors[j],3))
+        scene.add(svg.Line((100+fit(first_y), first_y), (100+fit(last_y), last_y),colors[j],3))
     angle /= 3
     angle = math.atan(angle) / math.pi * 180    
     print "Angle average = ", angle
@@ -71,9 +74,11 @@ def main(json_obj):
     back_vertebras = parse_markers((back_markers))
     scene = add_linfit_lines(neck_vertebras, scene)
     scene = add_linfit_lines(back_vertebras, scene)
-
-    vert_horiz_angles(neck_vertebras)
-    vert_horiz_angles(back_vertebras)
+    f = open("angles.csv", "w")
+    f.write("Angle,Tilt\n")
+    f.write(vert_horiz_angles(neck_vertebras))
+    f.write(vert_horiz_angles(back_vertebras))
+    f.close()
     # scene.add(svg.Text((200,100),"Angle = " + str(round(angle, 2)), 12))
     # scene.display()
     return scene.return_svg()
@@ -88,7 +93,7 @@ def linear_fit(y, x):
 @route('/main/<filepath:path>', method="get")
 def server_static(filepath):
     # return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
-    return static_file(filepath, root='/home/tema/dev/Web/spine-ui-prototype')
+    return static_file(filepath, root='/home/tema/spine_web/spine-ui-prototype')
     
 @post('/svg')
 def get_json():
