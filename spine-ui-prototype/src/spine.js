@@ -43,9 +43,7 @@ class Editor {
 		buttons.appendChild(download_button);
 		download_button.addEventListener ("click",
 		function() {
-			document.getElementById('link').click()
-			// var iframe = document.getElementById('invisible');
-			// iframe.src = "../../angles.csv";
+			document.getElementById('link').click();
 			// // code from https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript/11620761
 		});
 		let points = makePointsFromTemplate();
