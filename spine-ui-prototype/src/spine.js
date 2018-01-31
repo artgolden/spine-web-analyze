@@ -27,14 +27,27 @@ class Editor {
 	}
 	imageLoaded() {
 		console.log("Editor::imageLoaded()");
+		var buttons = document.createElement("div");
+		buttons.className = "end_buttons";
+		document.body.appendChild(buttons);
 		var measure_button = document.createElement("button");
 		measure_button.innerHTML = "measure deviation";
-		document.body.appendChild(measure_button);
+		buttons.appendChild(measure_button);
 		measure_button.addEventListener ("click", 
 		function() {
 			Editor_theEditor.requestSVG();
 		});
-		console.log("created button");
+		console.log("created measure_button");
+		var download_button = document.createElement("button");
+		download_button.innerHTML = "download measurements";
+		buttons.appendChild(download_button);
+		download_button.addEventListener ("click",
+		function() {
+			document.getElementById('link').click()
+			// var iframe = document.getElementById('invisible');
+			// iframe.src = "../../angles.csv";
+			// // code from https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript/11620761
+		});
 		let points = makePointsFromTemplate();
 		let marker = new Marker();
 		this.marker_obj = marker;
