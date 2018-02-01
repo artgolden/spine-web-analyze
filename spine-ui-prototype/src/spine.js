@@ -12,7 +12,8 @@ class Editor {
 			svg.setAttribute('class', 'lines');
 			svg.innerHTML = svg_code;
 			console.log(svg_code);
-			document.body.appendChild(svg);
+			document.body.appendChild(svg); 
+			console.log("svg html");
 		};
 	}
 	open(url) {
@@ -36,6 +37,7 @@ class Editor {
 		measure_button.addEventListener ("click", 
 		function() {
 			Editor_theEditor.requestSVG();
+			console.log("finished svg part");
 		});
 		console.log("created measure_button");
 		var download_button = document.createElement("button");
@@ -131,6 +133,7 @@ class Editor {
 			// json_to_send.resolution = ;
 			console.log(json_to_send);
 			xhr.send(JSON.stringify(json_to_send));
+			console.log("end of xhr");
 		};
 		getJSON(this.marker_obj, this.draw_svg, this.$image());
 			// this.drawSVG(svg_code)
