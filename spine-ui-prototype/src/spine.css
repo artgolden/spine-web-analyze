@@ -78,17 +78,31 @@
 	top: 0px;
 }
 
+button {
+	/* position: relative; */
+	margin-top: 20px;
+	line-height: 60px;
+	font-weight: bold;
+	padding: 0 40px;
+	background: salmon;
+	border: none;
+}
+button:hover {
+  background: lightsalmon;
+}
+
 .end_buttons {
   position: absolute;
+  z-index: 100;
   top: 300px;
   left: 100px;
-  margin-top: 20px;
-  line-height: 60px;
-  font-weight: bold;
-  padding: 0 40px;
-  background: salmon;
-  border: none;
 }
-.end_buttons:hover {
-  background: lightsalmon;
+
+#measure_button {
+	position: absolute;
+}
+
+#download_button {
+	position: relative;
+	top: 150px;
 }

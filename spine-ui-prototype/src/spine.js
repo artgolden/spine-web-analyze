@@ -33,6 +33,7 @@ class Editor {
 		document.body.appendChild(buttons);
 		var measure_button = document.createElement("button");
 		measure_button.innerHTML = "measure deviation";
+		measure_button.id = "measure_button";
 		buttons.appendChild(measure_button);
 		measure_button.addEventListener ("click", 
 		function() {
@@ -42,6 +43,7 @@ class Editor {
 		console.log("created measure_button");
 		var download_button = document.createElement("button");
 		download_button.innerHTML = "download measurements";
+		download_button.id = "download_button";
 		buttons.appendChild(download_button);
 		download_button.addEventListener ("click",
 		function() {
