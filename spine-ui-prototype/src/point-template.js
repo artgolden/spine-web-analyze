@@ -167,7 +167,13 @@ function pointId2place(id) {
 
 function pointTemplate_Front_RL() {
 	if(1) {
-		let pmap = JSON.parse(poinsTemplateJson_front_rl);
+    let projection = document.getElementById("projection_switcher").innerHTML;
+    if(projection == "FRONT"){
+      let pmap = JSON.parse(poinsTemplateJson_front_rl);  
+    }
+    else if(projection == "SIDE") {
+      let pmap = JSON.parse(poinsTemplateJson_side_rl);  
+    } 
 		pmap.points.forEach( function(element, index) {
 			element.place = pointId2place(element.id);
 		});
