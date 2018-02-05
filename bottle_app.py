@@ -39,11 +39,39 @@ def single_vert_angle(vert_r, vert_l):
     print horiz_angle, "Tilt to the ", tilt, "   (from the patients prespective)", y, x
     return str(horiz_angle) + "," + str(tilt)
 
+def average_angle(angle):
+    if angle < 0.01:
+        angle = 0
+    if angle > 0:
+        tilt = "LEFT"
+    elif angle == 0:
+        tilt = "NONE"
+    else:
+        tilt = "RIGHT"
+    return str(round(angle, 2)) + "," + str(tilt) + "\n"
+
 def vert_horiz_angles(vertebras):
     out = ""
     for i in range(len(vertebras[0])):
-        out += single_vert_angle(vertebras[0][i], vertebras[2][i]) + "\n"
+        out += single_vert_angle(vertebras[0][i], vertebras[2][i]) + "," + vertebras[0][i]["id"].split(".")[0] + "\n"
     return out
+
+def klukovidn_dist(klukovidn, vertebras):
+    print klukovidn, vertebras
+    out = ""
+    out += "Distance,,Vertebra to whitch\n"
+    out += "Right Klukovidn\n"
+    out += klu_dist(klukovidn[0], vertebras[1][0])
+    out += klu_dist(klukovidn[0], vertebras[1][2])
+    out += "Left Klukovidn\n"
+    out += klu_dist(klukovidn[1], vertebras[1][0])
+    out += klu_dist(klukovidn[1], vertebras[1][2])
+    return out
+    
+
+def klu_dist(klu, C_vert):
+    dist = math.sqrt((klu["x"] - C_vert["x"])**2 + (klu["y"] - C_vert["y"])**2)
+    return str(round(dist, 2)) + "," + "," + C_vert["id"].split(".")[0] + "\n"
     
 def add_linfit_lines(vertebras, scene):
     colors = [(0, 0, 255), (255, 0, 0), (0, 255, 0)]
@@ -62,22 +90,32 @@ def add_linfit_lines(vertebras, scene):
     angle = math.atan(angle) / math.pi * 180    
     print "Angle average = ", angle
     # scene.add(svg.Text((200, 200), angle, 24, (255, 255, 255)))
-    return scene
+    return scene, angle 
 
 def main(json_obj):
     image_resolution = json_obj["resolution"]
     scene = svg.Scene("Lines", image_resolution[0], image_resolution[1])
     neck_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'C']
     back_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'T']
-    
+    klukovidn = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'K']
     neck_vertebras = parse_markers((neck_markers))
     back_vertebras = parse_markers((back_markers))
-    scene = add_linfit_lines(neck_vertebras, scene)
-    scene = add_linfit_lines(back_vertebras, scene)
+    scene, angle_neck = add_linfit_lines(neck_vertebras, scene)
+    scene, angle_back = add_linfit_lines(back_vertebras, scene)
     f = open("angles.csv", "w")
-    f.write("Angle,Tilt\n")
+    f.write("Angles from vertical axis.\n")
+    f.write("Angle,Tilt,Vertebra\n")
+    f.write("Neck vertabras\n")
     f.write(vert_horiz_angles(neck_vertebras))
+    f.write("Neck vertabras angle average\n")
+    f.write(average_angle(angle_neck))
+    f.write("Back vertabras\n")
     f.write(vert_horiz_angles(back_vertebras))
+    f.write("Back vertabras angle average\n")
+    f.write(average_angle(angle_back))
+    f.write("Distances from klukovidni\n")
+    f.write(klukovidn_dist(klukovidn, neck_vertebras))
+    print klukovidn_dist(klukovidn, neck_vertebras)
     f.close()
     # scene.add(svg.Text((200,100),"Angle = " + str(round(angle, 2)), 12))
     # scene.display()
