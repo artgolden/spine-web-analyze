@@ -19,7 +19,13 @@
 	<div id="fileList">
   		<p>No files selected!</p>
 	</div>
-
+	<!-- <button id="front_projection" >FRONT projection</button> -->
+	<form>
+		<input class="button" type="button" value="choose SIDE projection" onclick='document.getElementById("projection_switch").innerHTML = "SIDE"'/>
+	</form>
+	<form>
+		<input class="button" type="button" value="choose FRONT projection" onclick='document.getElementById("projection_switch").innerHTML = "FRONT"'/>
+	</form>
 	<div id="templates" hidden="true">
 		<svg id="vertebra-point-template" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
 			<g>

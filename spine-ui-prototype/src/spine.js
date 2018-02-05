@@ -8,11 +8,14 @@ class Editor {
 	constructor() {
 		Editor.installLoadFileHandler();
 		this.draw_svg = function (svg_code) {
+			if(document.getElementById("lines") !== null) {
+				document.getElementById("lines").remove();
+			}
 			var svg = document.createElement('DIV');
-			svg.setAttribute('class', 'lines');
+			svg.setAttribute('id', 'lines');
 			svg.innerHTML = svg_code;
 			console.log(svg_code);
-			document.body.appendChild(svg); 
+			document.body.appendChild(svg);
 			console.log("svg html");
 		};
 	}
@@ -103,6 +106,7 @@ class Editor {
 			//TODO fileList.innerHTML = "";
  			const imageURL = window.URL.createObjectURL(files[0]);
 			Editor_theEditor.open(imageURL);
+			document.getElementById("fileSelect").style.visibility = "hidden";
 		}
 	}
 

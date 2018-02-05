@@ -7,8 +7,6 @@
 	font-size: 24px;
 }
 
-.set {
-}
 
 .vertebra-label {
 	font-size: 8;
@@ -70,12 +68,14 @@
 	position: absolute; /* Must be absolute or relative */
 	left: 0px;
 	top: 0px;
+	z-index: 11;
 }
 
-.lines {
+#lines {
 	position: absolute;
 	left: -100px;
 	top: 0px;
+	z-index: 1;
 }
 
 button {
@@ -91,9 +91,22 @@ button:hover {
   background: lightsalmon;
 }
 
+.button {
+	/* position: relative; */
+	margin-top: 20px;
+	line-height: 60px;
+	font-weight: bold;
+	padding: 0 40px;
+	background: salmon;
+	border: none;
+}
+.button:hover {
+  background: lightsalmon;
+}
+
 .end_buttons {
   position: absolute;
-  z-index: 100;
+  z-index: 10;
   top: 300px;
   left: 100px;
 }
@@ -105,4 +118,13 @@ button:hover {
 #download_button {
 	position: relative;
 	top: 150px;
+}
+
+#fileSelect {
+  font-size: 2rem;
+  text-align: center;
+  position: fixed;
+  /* z-index: 1; */
+  left: 40%;
+  top: 15%;	
 }

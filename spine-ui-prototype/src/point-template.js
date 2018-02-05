@@ -5,7 +5,7 @@
 */
 
 var poinsTemplateJson_front_rl = '{\
-"width": 2130, "height": 1542, "points": [\
+"width": 2130, "height": 1542, "projection": "FRONT", "points": [\
   {\
     "x": 1072,\
     "y": 422,\
@@ -53,9 +53,8 @@ var poinsTemplateJson_front_rl = '{\
   },\
   {\
     "x": 1076,\
-    "y": 788,\
-    "id": "Th1.c"\
-  },\
+    "y": 788,    \
+    "id": "Th1.c"},\
   {\
     "x": 955,\
     "y": 725,\
@@ -167,12 +166,12 @@ function pointId2place(id) {
 
 function pointTemplate_Front_RL() {
 	if(1) {
-    let projection = document.getElementById("projection_switcher").innerHTML;
+    var projection = document.getElementById("projection_switch").innerHTML;
     if(projection == "FRONT"){
-      let pmap = JSON.parse(poinsTemplateJson_front_rl);  
+      var pmap = JSON.parse(poinsTemplateJson_front_rl);  
     }
     else if(projection == "SIDE") {
-      let pmap = JSON.parse(poinsTemplateJson_side_rl);  
+      var pmap = JSON.parse(poinsTemplateJson_side_rl);  
     } 
 		pmap.points.forEach( function(element, index) {
 			element.place = pointId2place(element.id);
