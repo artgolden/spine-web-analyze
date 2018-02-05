@@ -130,12 +130,13 @@ def linear_fit(y, x):
 
 @route('/main/<filepath:path>', method="get")
 def server_static(filepath):
-    # return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
-    return static_file(filepath, root='/home/tema/spine_web/spine-ui-prototype')
+    return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
+    # return static_file(filepath, root='/home/tema/spine_web/spine-ui-prototype')
     
 @route('/angles.csv', method="get")
 def measurements_file():
-    return static_file("angles.csv", root='/home/tema/spine_web/')
+    # return static_file("angles.csv", root='/home/tema/spine_web/')
+    return static_file("angles.csv", root='/home/Temason/spine/spine-web-analyze/')
 @post('/svg')
 def get_json():
     json_obj = json.load(request.body)
