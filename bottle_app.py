@@ -102,7 +102,7 @@ def main(json_obj):
     back_vertebras = parse_markers((back_markers))
     scene, angle_neck = add_linfit_lines(neck_vertebras, scene)
     scene, angle_back = add_linfit_lines(back_vertebras, scene)
-    f = open("angles.csv", "w")
+    f = open("/spine/spine-web-analyze/angles.csv", "w")
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
     f.write("Neck vertabras\n")
