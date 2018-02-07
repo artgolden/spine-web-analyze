@@ -67,6 +67,7 @@ def klukovidn_dist_angles(klukovidn, vertebras):
     out += "Left Klukovidn\n"
     out += klu_dist(klukovidn[1], vertebras[1][0])
     out += klu_dist(klukovidn[1], vertebras[1][2])
+    out += "Klukovidn angles\n"
     out += "Angle,Side\n"
     out += klu_angle(klukovidn[0], vertebras[1][0], vertebras[1][2])
     out += ",RIGHT\n"
@@ -124,8 +125,8 @@ def main(json_obj):
     back_vertebras = parse_markers((back_markers))
     scene, angle_neck = add_linfit_lines(neck_vertebras, scene)
     scene, angle_back = add_linfit_lines(back_vertebras, scene)
-    # f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
-    f = open("angles.csv", "w")
+    f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
+    # f = open("angles.csv", "w")
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
     f.write("Neck vertabras\n")
@@ -153,13 +154,13 @@ def linear_fit(y, x):
 
 @route('/main/<filepath:path>', method="get")
 def server_static(filepath):
-    # return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
-    return static_file(filepath, root='/home/tema/spine_web/spine-ui-prototype')
+    return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
+    # return static_file(filepath, root='/home/tema/spine_web/spine-ui-prototype')
     
 @route('/angles.csv', method="get")
 def measurements_file():
-    return static_file("angles.csv", root='/home/tema/spine_web/')
-    # return static_file("angles.csv", root='/home/Temason/spine/spine-web-analyze/')
+    # return static_file("angles.csv", root='/home/tema/spine_web/')
+    return static_file("angles.csv", root='/home/Temason/spine/spine-web-analyze/')
 @post('/svg')
 def get_json():
     json_obj = json.load(request.body)
