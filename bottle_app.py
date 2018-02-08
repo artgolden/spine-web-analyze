@@ -23,6 +23,9 @@ def parse_markers(marker_list):
             print "Wrong marker name"    
     return vertebras
 
+# ===========================FRONT PROJECTION================================
+# ===========================FRONT PROJECTION================================
+
 def single_vert_angle(vert_r, vert_l):
     x = vert_l["x"] - vert_r["x"]
     y = vert_l["y"] - vert_r["y"]
@@ -95,6 +98,12 @@ def three_dot_angle(x1, y1, x2, y2, x3, y3): #points 2 and 3 on the sides of an 
 def klu_dist(klu, C_vert):
     dist = math.sqrt((klu["x"] - C_vert["x"])**2 + (klu["y"] - C_vert["y"])**2)
     return str(round(dist, 2)) + "," + "," + C_vert["id"].split(".")[0] + "\n"
+
+def linear_fit(y, x):
+    fit = np.polyfit(x, y, 1) # returns line equation coefficients
+    # fit_fn = np.poly1d(fit) 
+    # print fit_fn
+    return fit
     
 def add_linfit_lines(vertebras, scene):
     colors = [(0, 0, 255), (255, 0, 0), (0, 255, 0)]
@@ -115,7 +124,7 @@ def add_linfit_lines(vertebras, scene):
     # scene.add(svg.Text((200, 200), angle, 24, (255, 255, 255)))
     return scene, angle 
 
-def main(json_obj):
+def front_proj_code(json_obj):
     image_resolution = json_obj["resolution"]
     scene = svg.Scene("Lines", image_resolution[0], image_resolution[1])
     neck_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'C']
@@ -125,8 +134,8 @@ def main(json_obj):
     back_vertebras = parse_markers((back_markers))
     scene, angle_neck = add_linfit_lines(neck_vertebras, scene)
     scene, angle_back = add_linfit_lines(back_vertebras, scene)
-    f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
-    # f = open("angles.csv", "w")
+    # f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
+    f = open("angles.csv", "w")
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
     f.write("Neck vertabras\n")
@@ -139,28 +148,44 @@ def main(json_obj):
     f.write(average_angle(angle_back))
     f.write("Distances from klukovidni\n")
     f.write(klukovidn_dist_angles(klukovidn, neck_vertebras))
-    print klukovidn_dist_angles(klukovidn, neck_vertebras)
+    # print klukovidn_dist_angles(klukovidn, neck_vertebras)
     f.close()
     # scene.add(svg.Text((200,100),"Angle = " + str(round(angle, 2)), 12))
     # scene.display()
     return scene.return_svg()
 
+def side_proj_code(json_obj):
+    # image_resolution = json_obj["resolution"]
+    neck_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'C']
+    neck_vertebras = parse_markers((neck_markers))
+    # f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
+    f = open("angles.csv", "w")
+    f.write("that SIDE projection------")
+    f.write("Angles from vertical axis.\n")
+    f.write("Angle,Tilt,Vertebra\n")
+    f.write("Neck vertabras\n")
+    f.write(vert_horiz_angles(neck_vertebras))
+    f.close()
+    
 
-def linear_fit(y, x):
-    fit = np.polyfit(x, y, 1) # returns line equation coefficients
-    # fit_fn = np.poly1d(fit) 
-    # print fit_fn
-    return fit
+def main(json_obj):
+    if json_obj["projection"] == "FRONT": 
+        front_proj_code(json_obj)
+    elif json_obj["projection"] == "SIDE":
+        side_proj_code(json_obj)
+
+# ===========================FRONT PROJECTION================================
+# ===========================FRONT PROJECTION================================
 
 @route('/main/<filepath:path>', method="get")
 def server_static(filepath):
-    return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
-    # return static_file(filepath, root='/home/tema/spine_web/spine-ui-prototype')
+    # return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
+    return static_file(filepath, root='/home/tema/spine_web/spine-ui-prototype')
     
 @route('/angles.csv', method="get")
 def measurements_file():
-    # return static_file("angles.csv", root='/home/tema/spine_web/')
-    return static_file("angles.csv", root='/home/Temason/spine/spine-web-analyze/')
+    return static_file("angles.csv", root='/home/tema/spine_web/')
+    # return static_file("angles.csv", root='/home/Temason/spine/spine-web-analyze/')
 @post('/svg')
 def get_json():
     json_obj = json.load(request.body)

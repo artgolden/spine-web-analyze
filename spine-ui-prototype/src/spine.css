@@ -103,6 +103,9 @@ button:hover {
 .button:hover {
   background: lightsalmon;
 }
+.button:focus{
+    background: lightsalmon;
+}
 
 .end_buttons {
   position: absolute;

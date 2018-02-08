@@ -134,7 +134,8 @@ class Editor {
 			let imageHeight = image.height();
 			let json_to_send = {
 				"marker_list": marker_list,
-				"resolution": [imageWidth, imageHeight]
+				"resolution": [imageWidth, imageHeight],
+				"projection": document.getElementById("projection_switch").innerHTML
 		 	};
 			// json_to_send.resolution = ;
 			console.log(json_to_send);

@@ -4,6 +4,62 @@
 * Templates
 */
 
+
+var poinsTemplateJson_side_rl = '{\
+"width": 2130, "height": 1542, "projection": "SIDE", "points": [\
+  {\
+    "x": 863,\
+    "y": 196,\
+    "id": "C3.r"\
+  },\
+  {\
+    "x": 987,\
+    "y": 161,\
+    "id": "C3.l"\
+  },\
+  {\
+    "x": 883,\
+    "y": 325,\
+    "id": "C4.r"\
+  },\
+  {\
+    "x": 1013,\
+    "y": 300,\
+    "id": "C4.l"\
+  },\
+  {\
+    "x": 892.9895935058594,\
+    "y": 445.9895820617676,\
+    "id": "C5.r"\
+  },\
+  {\
+    "x": 1045,\
+    "y": 419.97916412353516,\
+    "id": "C5.l"\
+  },\
+  {\
+    "x": 904.9895935058594,\
+    "y": 561.98958587646484,\
+    "id": "C6.r"\
+  },\
+  {\
+    "x": 1062,\
+    "y": 540,\
+    "id": "C6.l"\
+  },\
+  {\
+    "x": 899,\
+    "y": 693,\
+    "id": "C7.r"\
+  },\
+  {\
+    "x": 1055,\
+    "y": 633,\
+    "id": "C7.l"\
+  }\
+]\
+}';
+
 var poinsTemplateJson_front_rl = '{\
 "width": 2130, "height": 1542, "projection": "FRONT", "points": [\
   {\
@@ -83,13 +139,26 @@ var poinsTemplateJson_front_rl = '{\
 ]\
 }';
 
+// {
+// \
+//   x: 126, \
+//   y: 964, \
+//   id: "Klu.r"\
+// }, \
+// {
+// \
+//   x: 1990, \
+//   y: 952, \
+//   id: "Klu.l"\
+// } \
+
 function pointId2place(id) {
 	const suffix2place = { "l":"left", "r": "right", "c":"center"};
 	let place = suffix2place[id.split(".").slice(-1)]; 
 	return place ? place : "other"; 
 }
 
-function pointTemplate_Front_RL() {
+function pointTemplate_parse() {
 	if(1) {
     var projection = document.getElementById("projection_switch").innerHTML;
     if(projection == "FRONT"){
@@ -137,19 +206,21 @@ function scalePointMap(pmap, width, height) {
 }
 
 function makePointsFromTemplate(width, height) {
-	let scaled = scalePointMap(pointTemplate_Front_RL());
+	let scaled = scalePointMap(pointTemplate_parse());
 	scaled["points"].push({"id": "test", x: 0, y: 0, place: "other"});
-  scaled["points"].push({
-    id: "Klu.r",
-    x: 126,
-    y: 964,
-    place: "right"
-  });
-  scaled["points"].push({
-    id: "Klu.l",
-    x: 1990,
-    y: 952,
-    place: "left"
-  });
+  if(scaled["projection"] == "FRONT") {
+    scaled["points"].push({
+      id: "Klu.r",
+      x: 126,
+      y: 964,
+      place: "right"
+    });
+    scaled["points"].push({
+      id: "Klu.l",
+      x: 1990,
+      y: 952,
+      place: "left"
+    });
+  }
 	return scaled["points"];
 }
