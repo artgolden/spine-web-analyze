@@ -26,6 +26,14 @@
 	<form>
 		<input class="button" type="button" value="choose FRONT projection" onclick='document.getElementById("projection_switch").innerHTML = "FRONT"'/>
 	</form>
+	<br>
+	<br>
+	<br>
+	<p><b>(OPTIONAL) Choose template for markers: </b></p>
+	<form id="myform"> <!-- for input template -->
+		<input id="myfile" class="button" name="files[]"  multiple="" type="file" />
+			<!-- <textarea id="text" rows="20" cols="40">nothing loaded</textarea> -->
+	</form>
 	<div id="templates" hidden="true">
 		<svg id="vertebra-point-template" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
 			<g>

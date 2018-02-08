@@ -123,6 +123,12 @@ button:hover {
 	top: 150px;
 }
 
+#download_template_button {
+	background: mediumseagreen;
+	position: relative;
+	top: 150px;
+}
+
 #fileSelect {
   font-size: 2rem;
   text-align: center;
@@ -130,4 +136,7 @@ button:hover {
   /* z-index: 1; */
   left: 40%;
   top: 15%;	
+}
+
+#myfile {
 }

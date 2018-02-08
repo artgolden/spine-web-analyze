@@ -3,6 +3,21 @@
 * Editor
 */
 
+function download(filename, data) {
+	var blob = new Blob([data], { type: 'text/csv' });
+	if (window.navigator.msSaveOrOpenBlob) {
+		window.navigator.msSaveBlob(blob, filename);
+	}
+	else {
+		var elem = window.document.createElement('a');
+		elem.href = window.URL.createObjectURL(blob);
+		elem.download = filename;
+		document.body.appendChild(elem);
+		elem.click();
+		document.body.removeChild(elem);
+	}
+}
+
 
 class Editor {
 	constructor() {
@@ -53,6 +68,22 @@ class Editor {
 			document.getElementById('link').click();
 			// // code from https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript/11620761
 		});
+		var download_template_button = document.createElement("button");
+		download_template_button.innerHTML = "download template";
+		download_template_button.id = "download_template_button";
+		buttons.appendChild(download_template_button);
+		download_template_button.addEventListener ("click",
+		function() {
+			var json = {
+				"height": Editor_theEditor.$image().height(),
+				"width": Editor_theEditor.$image().width(), // BETER NOT DO THIS but I do not want to accer the image the right way.....
+				"projection": document.getElementById("projection_switch").innerHTML + "",
+				"points": Editor_theEditor.marker_obj.values()
+			};
+			download("template---TODO_specificName.txt",JSON.stringify(json));
+		});
+
+
 		let points = makePointsFromTemplate();
 		let marker = new Marker();
 		this.marker_obj = marker;

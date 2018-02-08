@@ -152,6 +152,37 @@ var poinsTemplateJson_front_rl = '{\
 //   id: "Klu.l"\
 // } \
 
+document.forms['myform'].elements['myfile'].onchange = function (evt) {
+  if (!window.FileReader) return; // Browser is not compatible
+
+  var reader = new FileReader();
+
+  reader.onload = function (evt) {
+    if (evt.target.readyState != 2) return;
+    if (evt.target.error) {
+      alert('Error while reading file');
+      return;
+    }
+
+    filecontent = evt.target.result;
+    var projection = document.getElementById("projection_switch").innerHTML;
+    if (projection == "FRONT") {
+      poinsTemplateJson_front_rl = filecontent;
+      console.log(poinsTemplateJson_front_rl)
+    }
+    else if (projection == "SIDE") {
+      poinsTemplateJson_side_rl = filecontent;
+      console.log(poinsTemplateJson_side_rl)
+    }
+    console.log("template changed")
+    
+    // document.forms['myform'].elements['text'].value = evt.target.result;
+  };
+
+  reader.readAsText(evt.target.files[0]);
+};
+
+
 function pointId2place(id) {
 	const suffix2place = { "l":"left", "r": "right", "c":"center"};
 	let place = suffix2place[id.split(".").slice(-1)]; 
