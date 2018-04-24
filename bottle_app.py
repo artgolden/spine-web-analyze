@@ -93,10 +93,11 @@ def vert_horiz_angles(vertebras, proj):
     # out2 = ""
     # upper = single_vert_angle(vertebras[0][0], vertebras[2][0])
     for i in range(len(vertebras[0])):
-        curr = single_vert_angle(vertebras[0][i], vertebras[2][i], proj)
-        vert = vertebras[0][i]["id"].split(".")[0]
-        out += curr + "," + vert + "\n"
-        # out2 += 
+        if vertebras[0][i]["id"].split(".")[0][0] == "C":
+            curr = single_vert_angle(vertebras[0][i], vertebras[2][i], proj)
+            vert = vertebras[0][i]["id"].split(".")[0]
+            out += curr + "," + vert + "\n"
+            # out2 += 
     return out
 
 
@@ -117,6 +118,19 @@ def klukovidn_dist_angles(klukovidn, vertebras):
     out += klu_angle(klukovidn[1], vertebras[1][0], vertebras[1][2])
     out += ",LEFT\n"
     return out
+
+def pelvis_shift(vertebras):
+    c3_center = vertebras[0][0]["x"] + abs((vertebras[0][0]["x"] - vertebras[2][0]["x"]) / 2)
+    print c3_center
+    shift = c3_center - vertebras[0][5]["x"]
+    if shift > 0:
+        direction = "POSTERIOR"
+    elif shift < 0:
+        direction = "ANTERIOR"
+        shift = abs(shift)
+    else:
+        direction = "NO"
+    return str(shift) + "," + direction
     
 def klu_angle(klu, vert_up, vert_down):
     angle = three_dot_angle(klu["x"], klu["y"],\
@@ -198,15 +212,18 @@ def front_proj_code(json_obj):
 def side_proj_code(json_obj):
     proj = "SIDE"
     # image_resolution = json_obj["resolution"]
-    neck_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'C']
+    neck_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] in ['C','S']]
     neck_vertebras = parse_markers((neck_markers))
     # f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
+    print neck_vertebras, "==========================================="
     f = open("angles.csv", "w")
     f.write("that SIDE projection------")
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
     f.write("Neck vertabras\n")
     f.write(vert_horiz_angles(neck_vertebras, proj))
+    f.write("Pelvis shift \n")
+    f.write(pelvis_shift(neck_vertebras))
     f.close()
     
 
