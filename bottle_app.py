@@ -26,37 +26,77 @@ def parse_markers(marker_list):
 # ===========================FRONT PROJECTION================================
 # ===========================FRONT PROJECTION================================
 
-def single_vert_angle(vert_r, vert_l):
+def single_vert_angle(vert_r, vert_l, proj):
     x = vert_l["x"] - vert_r["x"]
     y = vert_l["y"] - vert_r["y"]
-    if abs(y) < 2:
-        y = 0
-    if y > 0:
-        tilt = "LEFT"
-    elif y == 0:
-        tilt = "NONE"
-    else:
-        tilt = "RIGHT"
+    if proj == "FRONT":
+        if abs(y) < 2:
+            y = 0
+        if y > 0:
+            tilt = "LEFT"
+        elif y == 0:
+            tilt = "NONE"
+        else:
+            tilt = "RIGHT"
+    elif proj == "SIDE":
+        if abs(y) < 2:
+            y = 0
+        if y > 0:
+            tilt = "ANTERIOR"
+        elif y == 0:
+            tilt = "NONE"
+        else:
+            tilt = "POSTERIOR"
+
     y = float(abs(y))
     horiz_angle = round(math.atan(y / x) * 180 / math.pi, 2)
     print horiz_angle, "Tilt to the ", tilt, "   (from the patients prespective)", y, x
     return str(horiz_angle) + "," + str(tilt)
 
-def average_angle(angle):
+def average_angle(angle, proj):
     if angle < 0.01:
         angle = 0
-    if angle > 0:
-        tilt = "LEFT"
-    elif angle == 0:
-        tilt = "NONE"
-    else:
-        tilt = "RIGHT"
+    if proj == "FRONT":
+        if angle > 0:
+            tilt = "LEFT"
+        elif angle == 0:
+            tilt = "NONE"
+        else:
+            tilt = "RIGHT"
+    elif proj == "SIDE":
+        if angle > 0:
+            tilt = "ANTERIOR"
+        elif angle == 0:
+            tilt = "NONE"
+        else:
+            tilt = "POSTERIOR"
     return str(round(angle, 2)) + "," + str(tilt) + "\n"
 
-def vert_horiz_angles(vertebras):
+# def between_angle(up_l, up_r, down_r, down_l):
+#     x = up_l["x"] - up_r["x"]
+#     y = up_l["y"] - up_r["y"]
+#     if abs(y) < 2:
+#         y = 0
+#     if y > 0:
+#         tilt = "LEFT"
+#     elif y == 0:
+#         tilt = "NONE"
+#     else:
+#         tilt = "RIGHT"
+#     y = float(abs(y))
+#     horiz_angle = round(math.atan(y / x) * 180 / math.pi, 2)
+#     tilt1 = 
+#     return 
+
+def vert_horiz_angles(vertebras, proj):
     out = ""
+    # out2 = ""
+    # upper = single_vert_angle(vertebras[0][0], vertebras[2][0])
     for i in range(len(vertebras[0])):
-        out += single_vert_angle(vertebras[0][i], vertebras[2][i]) + "," + vertebras[0][i]["id"].split(".")[0] + "\n"
+        curr = single_vert_angle(vertebras[0][i], vertebras[2][i], proj)
+        vert = vertebras[0][i]["id"].split(".")[0]
+        out += curr + "," + vert + "\n"
+        # out2 += 
     return out
 
 
@@ -125,6 +165,7 @@ def add_linfit_lines(vertebras, scene):
     return scene, angle 
 
 def front_proj_code(json_obj):
+    proj = "FRONT"
     image_resolution = json_obj["resolution"]
     scene = svg.Scene("Lines", image_resolution[0], image_resolution[1])
     neck_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'C']
@@ -134,18 +175,18 @@ def front_proj_code(json_obj):
     back_vertebras = parse_markers((back_markers))
     scene, angle_neck = add_linfit_lines(neck_vertebras, scene)
     scene, angle_back = add_linfit_lines(back_vertebras, scene)
-    f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
-    # f = open("angles.csv", "w")
+    # f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
+    f = open("angles.csv", "w")
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
     f.write("Neck vertabras\n")
-    f.write(vert_horiz_angles(neck_vertebras))
+    f.write(vert_horiz_angles(neck_vertebras, proj))
     f.write("Neck vertabras angle average\n")
-    f.write(average_angle(angle_neck))
+    f.write(average_angle(angle_neck, proj))
     f.write("Back vertabras\n")
-    f.write(vert_horiz_angles(back_vertebras))
+    f.write(vert_horiz_angles(back_vertebras, proj))
     f.write("Back vertabras angle average\n")
-    f.write(average_angle(angle_back))
+    f.write(average_angle(angle_back, proj))
     f.write("Distances from klukovidni\n")
     f.write(klukovidn_dist_angles(klukovidn, neck_vertebras))
     # print klukovidn_dist_angles(klukovidn, neck_vertebras)
@@ -155,16 +196,17 @@ def front_proj_code(json_obj):
     return scene.return_svg()
 
 def side_proj_code(json_obj):
+    proj = "SIDE"
     # image_resolution = json_obj["resolution"]
     neck_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'C']
     neck_vertebras = parse_markers((neck_markers))
-    f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
-    # f = open("angles.csv", "w")
+    # f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
+    f = open("angles.csv", "w")
     f.write("that SIDE projection------")
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
     f.write("Neck vertabras\n")
-    f.write(vert_horiz_angles(neck_vertebras))
+    f.write(vert_horiz_angles(neck_vertebras, proj))
     f.close()
     
 
@@ -179,13 +221,13 @@ def main(json_obj):
 
 @route('/main/<filepath:path>', method="get")
 def server_static(filepath):
-    return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
-    # return static_file(filepath, root='/home/tema/spine_web/spine-ui-prototype')
+    # return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
+    return static_file(filepath, root='/home/tema/spine_web/spine-ui-prototype')
     
 @route('/angles.csv', method="get")
 def measurements_file():
-    # return static_file("angles.csv", root='/home/tema/spine_web/')
-    return static_file("angles.csv", root='/home/Temason/spine/spine-web-analyze/')
+    return static_file("angles.csv", root='/home/tema/spine_web/')
+    # return static_file("angles.csv", root='/home/Temason/spine/spine-web-analyze/')
 @post('/svg')
 def get_json():
     json_obj = json.load(request.body)
@@ -194,4 +236,4 @@ def get_json():
 if __name__ == "__main__":
     run(debug=True, reloader=True)
 
-application = default_app()
+# application = default_app()
