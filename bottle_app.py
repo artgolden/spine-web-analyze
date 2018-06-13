@@ -26,29 +26,38 @@ def parse_markers(marker_list):
 def single_vert_angle(vert_r, vert_l, proj):
     x = vert_l["x"] - vert_r["x"]
     y = vert_l["y"] - vert_r["y"]
+    yyy = float(abs(y))
+    horiz_angle = round(math.atan(yyy / x) * 180 / math.pi, 2)
     if proj == "FRONT":
         if abs(y) < 2:
             y = 0
         if y > 0:
             tilt = "LEFT"
+            horiz_angle_signed = horiz_angle * -1
         elif y == 0:
             tilt = "NONE"
+            horiz_angle_signed = horiz_angle 
         else:
             tilt = "RIGHT"
+            horiz_angle_signed = horiz_angle
     elif proj == "SIDE":
         if abs(y) < 2:
             y = 0
         if y > 0:
-            tilt = "ANTERIOR"
+            tilt = "POSTERIOR"
+            horiz_angle_signed = horiz_angle * -1
         elif y == 0:
             tilt = "NONE"
+            horiz_angle_signed = horiz_angle
         else:
-            tilt = "POSTERIOR"
-
-    y = float(abs(y))
-    horiz_angle = round(math.atan(y / x) * 180 / math.pi, 2)
+            tilt = "ANTERIOR"
+            horiz_angle_signed = horiz_angle
     print horiz_angle, "Tilt to the ", tilt, "   (from the patients prespective)", y, x
-    return str(horiz_angle) + "," + str(tilt)
+    return str(abs(horiz_angle)) + "," + str(tilt), horiz_angle_signed
+    # if proj == "FRONT":
+    # else:
+    #     return [abs(horiz_angle), str(tilt), horiz_angle_signed]
+
 
 def average_angle(angle, proj):
     if angle < 0.01:
@@ -69,32 +78,49 @@ def average_angle(angle, proj):
             tilt = "POSTERIOR"
     return str(round(angle, 2)) + "," + str(tilt) + "\n"
 
-def between_angle(up_l, up_r, down_r, down_l):
-    x = up_l["x"] - up_r["x"]
-    y = up_l["y"] - up_r["y"]
-    if abs(y) < 2:
-        y = 0
-    if y > 0:
-        tilt = "LEFT"
-    elif y == 0:
-        tilt = "NONE"
+def between_angle(up_r, up_l, down_r, down_l, proj):
+    angle_up = single_vert_angle(up_l, up_r, proj)[1]
+    angle_down = single_vert_angle(down_l, down_r, proj)[1]
+    if abs(angle_down) < abs(angle_up):
+        angle = angle_up - angle_down
     else:
-        tilt = "RIGHT"
-    y = float(abs(y))
-    horiz_angle = round(math.atan(y / x) * 180 / math.pi, 2)
-    tilt1 = 1
-    return str(angle) + "," + tilt + "," +verts
+        angle = angle_down - angle_up
 
-def vert_horiz_angles(vertebras, proj):
+    if proj == "FRONT":
+        if angle < 0:
+            tilt = "LEFT"
+        elif angle == 0:
+            tilt = "NONE"
+        else:
+            tilt = "RIGHT"
+    elif proj == "SIDE":
+        if angle < 0:
+            tilt = "POSTERIOR"
+        elif angle == 0:
+            tilt = "NONE"
+        else:
+            tilt = "ANTERIOR"
+    return str(angle) + "," + tilt
+ 
+def vert_horiz_angles(vertebras, proj, pair_switch):
     out = ""
     # out2 = ""
     # upper = single_vert_angle(vertebras[0][0], vertebras[2][0])
-    for i in range(len(vertebras[0])):
-        if vertebras[0][i]["id"].split(".")[0][0] == "C":
-            curr = single_vert_angle(vertebras[0][i], vertebras[2][i], proj)
-            vert = vertebras[0][i]["id"].split(".")[0]
-            out += curr + "," + vert + "\n"
-            # out2 += 
+    if not pair_switch:
+        for i in range(len(vertebras[0])):
+            if vertebras[0][i]["id"].split(".")[0][0] == "C":
+                curr = single_vert_angle(vertebras[0][i], vertebras[2][i], proj)[0]
+                vert = vertebras[0][i]["id"].split(".")[0]
+                out += curr + "," + vert + "\n"
+    else:
+        for i in range(len(vertebras[0]) - 1):
+            if vertebras[0][i]["id"].split(".")[0][0] == "C" and vertebras[0][i + 1]["id"].split(".")[0][0] == "C":
+                up_l, up_r = vertebras[0][i], vertebras[2][i]
+                down_l, down_r = vertebras[0][i + 1], vertebras[2][i + 1]
+                between = between_angle(up_r, up_l, down_r, down_l, proj)
+                vert_up = vertebras[0][i]["id"].split(".")[0]
+                vert_down = vertebras[0][i + 1]["id"].split(".")[0]
+                out += between + "," + vert_up + "-" + vert_down + "\n"
     return out
 
 
@@ -122,9 +148,9 @@ def pelvis_shift(vertebras):
     shift = c3_center - vertebras[0][5]["x"]
     shift = round(shift)
     if shift > 0:
-        direction = "POSTERIOR"
-    elif shift < 0:
         direction = "ANTERIOR"
+    elif shift < 0:
+        direction = "POSTERIOR"
         shift = abs(shift)
     else:
         direction = "NO"
@@ -192,11 +218,11 @@ def front_proj_code(json_obj):
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
     f.write("Neck vertabras\n")
-    f.write(vert_horiz_angles(neck_vertebras, proj))
+    f.write(vert_horiz_angles(neck_vertebras, proj, False))
     f.write("Neck vertabras angle average\n")
     f.write(average_angle(angle_neck, proj))
     f.write("Back vertabras\n")
-    f.write(vert_horiz_angles(back_vertebras, proj))
+    f.write(vert_horiz_angles(back_vertebras, proj, False))
     f.write("Back vertabras angle average\n")
     f.write(average_angle(angle_back, proj))
     f.write("Distances from klukovidni\n")
@@ -221,9 +247,9 @@ def side_proj_code(json_obj):
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
     f.write("Neck vertabras\n")
-    f.write(vert_horiz_angles(neck_vertebras, proj))
-    # f.write("Pairwise angles between vertebras \n")
-    # f.write(pair_angles(neck_vertebras))
+    f.write(vert_horiz_angles(neck_vertebras, proj, False))
+    f.write("Pairwise angles between vertebras \n")
+    f.write(vert_horiz_angles(neck_vertebras, proj, True))
     f.write("Pelvis shift \n")
     t = neck_vertebras
     t[0].append(pelvis)
