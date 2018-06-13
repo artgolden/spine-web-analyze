@@ -23,9 +23,6 @@ def parse_markers(marker_list):
             print "Wrong marker name"    
     return vertebras
 
-# ===========================FRONT PROJECTION================================
-# ===========================FRONT PROJECTION================================
-
 def single_vert_angle(vert_r, vert_l, proj):
     x = vert_l["x"] - vert_r["x"]
     y = vert_l["y"] - vert_r["y"]
@@ -72,21 +69,21 @@ def average_angle(angle, proj):
             tilt = "POSTERIOR"
     return str(round(angle, 2)) + "," + str(tilt) + "\n"
 
-# def between_angle(up_l, up_r, down_r, down_l):
-#     x = up_l["x"] - up_r["x"]
-#     y = up_l["y"] - up_r["y"]
-#     if abs(y) < 2:
-#         y = 0
-#     if y > 0:
-#         tilt = "LEFT"
-#     elif y == 0:
-#         tilt = "NONE"
-#     else:
-#         tilt = "RIGHT"
-#     y = float(abs(y))
-#     horiz_angle = round(math.atan(y / x) * 180 / math.pi, 2)
-#     tilt1 = 
-#     return 
+def between_angle(up_l, up_r, down_r, down_l):
+    x = up_l["x"] - up_r["x"]
+    y = up_l["y"] - up_r["y"]
+    if abs(y) < 2:
+        y = 0
+    if y > 0:
+        tilt = "LEFT"
+    elif y == 0:
+        tilt = "NONE"
+    else:
+        tilt = "RIGHT"
+    y = float(abs(y))
+    horiz_angle = round(math.atan(y / x) * 180 / math.pi, 2)
+    tilt1 = 1
+    return str(angle) + "," + tilt + "," +verts
 
 def vert_horiz_angles(vertebras, proj):
     out = ""
@@ -123,6 +120,7 @@ def pelvis_shift(vertebras):
     c3_center = vertebras[0][0]["x"] + abs((vertebras[0][0]["x"] - vertebras[2][0]["x"]) / 2)
     print c3_center
     shift = c3_center - vertebras[0][5]["x"]
+    shift = round(shift)
     if shift > 0:
         direction = "POSTERIOR"
     elif shift < 0:
@@ -212,18 +210,24 @@ def front_proj_code(json_obj):
 def side_proj_code(json_obj):
     proj = "SIDE"
     # image_resolution = json_obj["resolution"]
-    neck_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] in ['C','S']]
+    neck_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] in ['C']]
+    pelvis = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] in ['S']]
     neck_vertebras = parse_markers((neck_markers))
+    pelvis = pelvis[0]
+    print pelvis, "==============="
     # f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
-    print neck_vertebras, "==========================================="
     f = open("angles.csv", "w")
     f.write("that SIDE projection------")
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
     f.write("Neck vertabras\n")
     f.write(vert_horiz_angles(neck_vertebras, proj))
+    # f.write("Pairwise angles between vertebras \n")
+    # f.write(pair_angles(neck_vertebras))
     f.write("Pelvis shift \n")
-    f.write(pelvis_shift(neck_vertebras))
+    t = neck_vertebras
+    t[0].append(pelvis)
+    f.write(pelvis_shift(t))
     f.close()
     
 
@@ -233,8 +237,6 @@ def main(json_obj):
     elif json_obj["projection"] == "SIDE":
         side_proj_code(json_obj)
 
-# ===========================FRONT PROJECTION================================
-# ===========================FRONT PROJECTION================================
 
 @route('/main/<filepath:path>', method="get")
 def server_static(filepath):
