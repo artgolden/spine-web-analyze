@@ -54,9 +54,6 @@ def single_vert_angle(vert_r, vert_l, proj):
             horiz_angle_signed = horiz_angle
     print horiz_angle, "Tilt to the ", tilt, "   (from the patients prespective)", y, x
     return str(abs(horiz_angle)) + "," + str(tilt), horiz_angle_signed
-    # if proj == "FRONT":
-    # else:
-    #     return [abs(horiz_angle), str(tilt), horiz_angle_signed]
 
 
 def average_angle(angle, proj):
@@ -104,8 +101,6 @@ def between_angle(up_r, up_l, down_r, down_l, proj):
  
 def vert_horiz_angles(vertebras, proj, pair_switch):
     out = ""
-    # out2 = ""
-    # upper = single_vert_angle(vertebras[0][0], vertebras[2][0])
     if not pair_switch:
         for i in range(len(vertebras[0])):
             if vertebras[0][i]["id"].split(".")[0][0] == "C":
@@ -241,8 +236,9 @@ def side_proj_code(json_obj):
     neck_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] in ['C']]
     pelvis = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] in ['S']]
     neck_vertebras = parse_markers((neck_markers))
+    print pelvis, "====before==========="
     pelvis = pelvis[0]
-    print pelvis, "==============="
+    print pelvis, "====after==========="
     f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
     # f = open("angles.csv", "w") # ----------------------
     f.write("that SIDE projection------")
