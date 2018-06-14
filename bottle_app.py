@@ -100,7 +100,7 @@ def between_angle(up_r, up_l, down_r, down_l, proj):
             tilt = "NONE"
         else:
             tilt = "ANTERIOR"
-    return str(angle) + "," + tilt
+    return str(abs(angle)) + "," + tilt
  
 def vert_horiz_angles(vertebras, proj, pair_switch):
     out = ""
@@ -219,6 +219,8 @@ def front_proj_code(json_obj):
     f.write("Angle,Tilt,Vertebra\n")
     f.write("Neck vertabras\n")
     f.write(vert_horiz_angles(neck_vertebras, proj, False))
+    f.write("Neck vertabras paired angles\n")
+    f.write(vert_horiz_angles(neck_vertebras, proj, True))
     f.write("Neck vertabras angle average\n")
     f.write(average_angle(angle_neck, proj))
     f.write("Back vertabras\n")
