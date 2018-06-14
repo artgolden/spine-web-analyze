@@ -283,4 +283,4 @@ def get_json():
 if __name__ == "__main__":
     run(debug=True, reloader=True)
 
-# application = default_app()
+application = default_app()
