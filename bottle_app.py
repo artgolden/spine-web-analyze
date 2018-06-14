@@ -213,8 +213,8 @@ def front_proj_code(json_obj):
     back_vertebras = parse_markers((back_markers))
     scene, angle_neck = add_linfit_lines(neck_vertebras, scene)
     scene, angle_back = add_linfit_lines(back_vertebras, scene)
-    # f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
-    f = open("angles.csv", "w")
+    f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w") #--------------------
+    # f = open("angles.csv", "w")
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
     f.write("Neck vertabras\n")
@@ -243,8 +243,8 @@ def side_proj_code(json_obj):
     neck_vertebras = parse_markers((neck_markers))
     pelvis = pelvis[0]
     print pelvis, "==============="
-    # f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
-    f = open("angles.csv", "w")
+    f = open("/home/Temason/spine/spine-web-analyze/angles.csv", "w")
+    # f = open("angles.csv", "w") # ----------------------
     f.write("that SIDE projection------")
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
@@ -268,13 +268,13 @@ def main(json_obj):
 
 @route('/main/<filepath:path>', method="get")
 def server_static(filepath):
-    # return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
-    return static_file(filepath, root='/home/tema/spine_web/spine-ui-prototype')
+    return static_file(filepath, root='/home/Temason/spine/spine-web-analyze/spine-ui-prototype')
+    # return static_file(filepath, root='/home/tema/spine_web/spine-ui-prototype')
     
 @route('/angles.csv', method="get")
 def measurements_file():
-    return static_file("angles.csv", root='/home/tema/spine_web/')
-    # return static_file("angles.csv", root='/home/Temason/spine/spine-web-analyze/')
+    # return static_file("angles.csv", root='/home/tema/spine_web/')
+    return static_file("angles.csv", root='/home/Temason/spine/spine-web-analyze/')
 @post('/svg')
 def get_json():
     json_obj = json.load(request.body)
