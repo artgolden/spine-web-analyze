@@ -1,4 +1,4 @@
-'''Read JSON file and output svg and data'''
+    '''Read JSON file and output svg and data'''
 import json
 import math
 import numpy as np
@@ -119,21 +119,21 @@ def vert_horiz_angles(vertebras, proj, pair_switch):
     return out
 
 
-def klukovidn_dist_angles(klukovidn, vertebras):
-    print klukovidn, vertebras
+def kluvovidn_dist_angles(kluvovidn, vertebras):
+    print kluvovidn, vertebras
     out = ""
     out += "Distance,,Vertebra to whitch\n"
-    out += "Right Klukovidn\n"
-    out += klu_dist(klukovidn[0], vertebras[1][0])
-    out += klu_dist(klukovidn[0], vertebras[1][2])
-    out += "Left Klukovidn\n"
-    out += klu_dist(klukovidn[1], vertebras[1][0])
-    out += klu_dist(klukovidn[1], vertebras[1][2])
-    out += "Klukovidn angles\n"
+    out += "Right Kluvovidn\n"
+    out += klu_dist(kluvovidn[0], vertebras[1][0])
+    out += klu_dist(kluvovidn[0], vertebras[1][2])
+    out += "Left Kluvovidn\n"
+    out += klu_dist(kluvovidn[1], vertebras[1][0])
+    out += klu_dist(kluvovidn[1], vertebras[1][2])
+    out += "Kluvovidn angles\n"
     out += "Angle,Side\n"
-    out += klu_angle(klukovidn[0], vertebras[1][0], vertebras[1][2])
+    out += kluvovidn_angle(kluvovidn[0], vertebras[1][0], vertebras[1][2])
     out += ",RIGHT\n"
-    out += klu_angle(klukovidn[1], vertebras[1][0], vertebras[1][2])
+    out += kluvovidn_angle(kluvovidn[1], vertebras[1][0], vertebras[1][2])
     out += ",LEFT\n"
     return out
 
@@ -151,7 +151,7 @@ def pelvis_shift(vertebras):
         direction = "NO"
     return str(shift) + "," + direction
     
-def klu_angle(klu, vert_up, vert_down):
+def kluvovidn_angle(klu, vert_up, vert_down):
     angle = three_dot_angle(klu["x"], klu["y"],\
      vert_up["x"], vert_up["y"], vert_down["x"], vert_down["y"])
 
@@ -203,7 +203,7 @@ def front_proj_code(json_obj):
     scene = svg.Scene("Lines", image_resolution[0], image_resolution[1])
     neck_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'C']
     back_markers = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'T']
-    klukovidn = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'K']
+    kluvovidn = [x for x in json_obj["marker_list"] if x["id"].split(".")[0][0] == 'K']
     neck_vertebras = parse_markers((neck_markers))
     back_vertebras = parse_markers((back_markers))
     scene, angle_neck = add_linfit_lines(neck_vertebras, scene)
@@ -222,9 +222,9 @@ def front_proj_code(json_obj):
     f.write(vert_horiz_angles(back_vertebras, proj, False))
     f.write("Back vertabras angle average\n")
     f.write(average_angle(angle_back, proj))
-    f.write("Distances from klukovidni\n")
-    f.write(klukovidn_dist_angles(klukovidn, neck_vertebras))
-    # print klukovidn_dist_angles(klukovidn, neck_vertebras)
+    f.write("Distances from kluvovidni\n")
+    f.write(kluvovidn_dist_angles(kluvovidn, neck_vertebras))
+    # print kluvovidn_dist_angles(kluvovidn, neck_vertebras)
     f.close()
     # scene.add(svg.Text((200,100),"Angle = " + str(round(angle, 2)), 12))
     # scene.display()
