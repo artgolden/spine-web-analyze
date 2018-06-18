@@ -123,13 +123,13 @@ def kluvovidn_dist_angles(kluvovidn, vertebras):
     print kluvovidn, vertebras
     out = ""
     out += "Distance,,Vertebra to whitch\n"
-    out += "Right Kluvovidn\n"
+    out += "Right coracoid\n"
     out += klu_dist(kluvovidn[0], vertebras[1][0])
     out += klu_dist(kluvovidn[0], vertebras[1][2])
-    out += "Left Kluvovidn\n"
+    out += "Left coracoid\n"
     out += klu_dist(kluvovidn[1], vertebras[1][0])
     out += klu_dist(kluvovidn[1], vertebras[1][2])
-    out += "Kluvovidn angles\n"
+    out += "Coracoid angles\n"
     out += "Angle,Side\n"
     out += kluvovidn_angle(kluvovidn[0], vertebras[1][0], vertebras[1][2])
     out += ",RIGHT\n"
@@ -212,17 +212,17 @@ def front_proj_code(json_obj):
     # f = open("angles.csv", "w")
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
-    f.write("Neck vertabras\n")
+    f.write("C-vertabras\n")
     f.write(vert_horiz_angles(neck_vertebras, proj, False))
-    f.write("Neck vertabras paired angles\n")
+    f.write("C-vertabras paired angles\n")
     f.write(vert_horiz_angles(neck_vertebras, proj, True))
-    f.write("Neck vertabras angle average\n")
+    f.write("C-vertabras angle average\n")
     f.write(average_angle(angle_neck, proj))
-    f.write("Back vertabras\n")
+    f.write("Th-vertabras\n")
     f.write(vert_horiz_angles(back_vertebras, proj, False))
-    f.write("Back vertabras angle average\n")
+    f.write("Th-vertabras angle average\n")
     f.write(average_angle(angle_back, proj))
-    f.write("Distances from kluvovidni\n")
+    f.write("Distances from coracoid\n")
     f.write(kluvovidn_dist_angles(kluvovidn, neck_vertebras))
     # print kluvovidn_dist_angles(kluvovidn, neck_vertebras)
     f.close()
@@ -244,7 +244,7 @@ def side_proj_code(json_obj):
     f.write("that SIDE projection------")
     f.write("Angles from vertical axis.\n")
     f.write("Angle,Tilt,Vertebra\n")
-    f.write("Neck vertabras\n")
+    f.write("C-vertabras\n")
     f.write(vert_horiz_angles(neck_vertebras, proj, False))
     f.write("Pairwise angles between vertebras \n")
     f.write(vert_horiz_angles(neck_vertebras, proj, True))
