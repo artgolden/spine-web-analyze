@@ -1,4 +1,4 @@
-    '''Read JSON file and output svg and data'''
+'''Read JSON file and output svg and data'''
 import json
 import math
 import numpy as np
